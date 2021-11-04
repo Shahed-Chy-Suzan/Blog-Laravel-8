@@ -1,53 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layout')
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blog - Alphayo Blog</title>
-
-  <!-- Css -->
-  <link rel="stylesheet" href="{{asset('css/style.css')}}" />
-  <!-- Font awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-</head>
-
-<body>
-  <div id="wrapper">
-    <!-- sidebar -->
-    <div class="sidebar">
-      <span class="closeButton">&times;</span>
-      <p class="brand-title"><a href="">Alphayo Blog</a></p>
-
-      <div class="side-links">
-        <ul>
-          <li><a class="active" href="/">Home</a></li>
-          <li><a href="/blog">Blog</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </div>
-      <!-- sidebar footer -->
-      <footer class="sidebar-footer">
-        <div>
-          <a href=""><i class="fab fa-facebook-f"></i></a>
-          <a href=""><i class="fab fa-instagram"></i></a>
-          <a href=""><i class="fab fa-twitter"></i></a>
-        </div>
-
-        <small>&copy 2021 Alphayo Blog</small>
-      </footer>
-    </div>
-    <!-- Menu Button -->
-    <div class="menuButton">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-
-    <!-- main -->
-    <main class="container">
+@section('main')
+     <!-- main -->
+     <main class="container">
       <h2 class="header-title">All Blog Posts</h2>
       <div class="searchbar">
         <form action="">
@@ -72,7 +27,7 @@
           <img src="{{asset('images/pic1.jpg')}}" alt="" />
           <p>
             2 hours ago
-            <span>Written By Alphayo Wakarindi</span>
+            <span>Written By Shahed Chy Suzan</span>
           </p>
           <h4>
             <a href="/blog/single-blog-post">Benefits of getting covid 19 vaccination</a>
@@ -83,7 +38,7 @@
           <img src="{{asset('images/pic2.jpg')}}" alt="" />
           <p>
             23 hours ago
-            <span>Written By Alphayo Wakarindi</span>
+            <span>Written By Shahed Chy Suzan</span>
           </p>
           <h4 style="font-weight: bolder">
             <a href="/blog/single-blog-post">Top 10 Music Stories Never Told</a>
@@ -94,7 +49,7 @@
           <img src="{{asset('images/pic3.jpg')}}" alt="" />
           <p>
             2 days ago
-            <span>Written By Alphayo Wakarindi</span>
+            <span>Written By Shahed Chy Suzan</span>
           </p>
           <h4 style="font-weight: bolder">
             <a href="/blog/single-blog-post">WRC Safari Rally Back To Kenya After 19 Years</a>
@@ -105,7 +60,7 @@
           <img src="{{asset('images/pic4.jpg')}}" alt="" />
           <p>
             3 days ago
-            <span>Written By Alphayo Wakarindi</span>
+            <span>Written By Shahed Chy Suzan</span>
           </p>
           <h4 style="font-weight: bolder">
             <a href="/blog/single-blog-post">Premier League 2021/2022 Fixtures</a>
@@ -116,7 +71,7 @@
           <img src="{{asset('images/pic5.jpg')}}" alt="" />
           <p>
             2 weeks ago
-            <span>Written By Alphayo Wakarindi</span>
+            <span>Written By Shahed Chy Suzan</span>
           </p>
           <h4 style="font-weight: bolder">
             <a href="/blog/single-blog-post">12 Health Benefits Of Pomegranate Fruit</a>
@@ -127,7 +82,7 @@
           <img src="{{asset('images/pic6.jpg')}}" alt="" />
           <p>
             1 month ago
-            <span>Written By Alphayo Wakarindi</span>
+            <span>Written By Shahed Chy Suzan</span>
           </p>
           <h4 style="font-weight: bolder">
             <a href="/blog/single-blog-post">Nairobi, The Only City In The World With A National Park</a>
@@ -146,32 +101,4 @@
         </div>
       </section>
 
-      <!-- Main footer -->
-      <footer class="main-footer">
-        <div>
-          <a href=""><i class="fab fa-facebook-f"></i></a>
-          <a href=""><i class="fab fa-instagram"></i></a>
-          <a href=""><i class="fab fa-twitter"></i></a>
-        </div>
-        <small>&copy 2021 Alphayo Blog</small>
-      </footer>
-    </main>
-  </div>
-
-  <!-- Click events to menu and close buttons using javaascript-->
-  <script>
-    document
-      .querySelector(".menuButton")
-      .addEventListener("click", function () {
-        document.querySelector(".sidebar").style.width = "100%";
-        document.querySelector(".sidebar").style.zIndex = "5";
-      });
-    document
-      .querySelector(".closeButton")
-      .addEventListener("click", function () {
-        document.querySelector(".sidebar").style.width = "0";
-      });
-  </script>
-</body>
-
-</html>
+@endsection
