@@ -611,7 +611,21 @@
 
 
 
-
+//----------------------------------------- database/migrations/posts_table.php ----------------------------------------------------------
+			
+				-- command: php artisan make:migration create_posts_table  
+				
+				Schema::create('posts', function (Blueprint $table) {
+					$table->id();
+					$table->string('title');
+					$table->string('slug');
+					$table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');	//kono user delete korle tar sob post delete hoye jabe etai holo onDelete('cascade') er kaj.
+					$table->string('imagePath');
+					$table->text('body');
+					$table->timestamps();
+				});
+				
+				-- command: php artisan migrate
 
 
 
