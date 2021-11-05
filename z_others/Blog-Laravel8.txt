@@ -27,7 +27,7 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------
 														------ New in this project ------
 //---------------------------------------------------------------------------------------------------------------------------------------------
-
+			//-- <a class="{{Request::routeIs('about') ? 'active' : ''}}" href="{{route('about')}}">About</a>
 
 
 //------------//------------//------------//---------------//---------------//-------------//-----------//------------//--------------//---------
@@ -40,6 +40,7 @@
 //==================================================================================================
 		-- 1 --install laravel-8 command : composer create-project laravel/laravel blog
 				-- php artisan serve
+				-- php artisan migrate
 		
 		
 //--------------------------------------------------- .ENV -------------------------------------------------------------------------------------------
@@ -377,8 +378,6 @@
 
 					</html>
 
-
-
 //--------------------------------------------------------welcome.blade.php-----------------------------------------------------------------------------
 				@extends('layout')
 
@@ -403,7 +402,45 @@
 
 //-------------------//----------------//---------------------//-------------------//------------------//------------------//------------//-------------//--
 //-------------------//----------------//---------------------//-------------------//------------------//------------------//------------//-------------//--
-Sidebar Links active dynamically
+
+
+
+
+
+//------------------------------------------------ Authentication with Laravel Breeze ----------------------------------------------------------------
+			//--1-- command: composer require laravel/breeze --dev
+			//--2-- command: php artisan breeze:install
+			//--3-- command: npm install
+			//--4-- command: npm run dev
+			
+			//--erpor amra jodi amader project e giye root_route/login (http://127.0.0.1:8000/login) & root_route/register (http://127.0.0.1:8000/register) diee taile amra Login & Register page dekte pabo. But ekn amra jodi amader Home page(http://127.0.0.1:8000/) e jaite chai taile amra jaite parbo na, error dibe, because ekhane Laravel-breeze install hole amader project er 'web.php' file ta abar new kore generate hoy, jar karone amader agher code gual sob web.php theke chole jabe, now amader k abar code gula likhe/ante hobe(ekhane amra github theke abar web.php er code gual copy kore niye eshchi). taile abar amra home ta pabo jeheto route add kora hoyeche ekn.
+			
+								//----------------------------- web.php file e new vabe nicher code gula add hoyeche ---------------------------
+											Route::get('/dashboard', function () {
+												return view('dashboard');
+											})->middleware(['auth'])->name('dashboard');
+
+											require __DIR__.'/auth.php';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
