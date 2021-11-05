@@ -50,9 +50,9 @@
             <!-- sidebar footer -->
             <footer class="sidebar-footer">
                 <div>
+                    <a href="https://github.com/Shahed-Chy-Suzan/Blog-Laravel-8" target="_blank"><i class="fab fa-github"></i></a>
                     <a href=""><i class="fab fa-facebook-f"></i></a>
                     <a href=""><i class="fab fa-instagram"></i></a>
-                    <a href=""><i class="fab fa-twitter"></i></a>
                 </div>
 
                 <small>&copy 2021 Suzan's Blog</small>
