@@ -414,10 +414,13 @@
 
 
 //------------------------------------------------ Authentication with Laravel Breeze ----------------------------------------------------------------
+			//--Laravel-breeze Documentation in Laravel_Doc: https://laravel.com/docs/8.x/starter-kits#laravel-breeze
+			
 			//--1-- command: composer require laravel/breeze --dev
 			//--2-- command: php artisan breeze:install
 			//--3-- command: npm install
-			//--4-- command: npm run dev
+			//--4-- command: npm run device-width
+			//---- command: php artisan migrate
 			
 			//--erpor amra jodi amader project e giye root_route/login (http://127.0.0.1:8000/login) & root_route/register (http://127.0.0.1:8000/register) diee taile amra Login & Register page dekte pabo. But ekn amra jodi amader Home page(http://127.0.0.1:8000/) e jaite chai taile amra jaite parbo na, error dibe, because ekhane Laravel-breeze install hole amader project er 'web.php' file ta abar new kore generate hoy, jar karone amader agher code gual sob web.php theke chole jabe, now amader k abar code gula likhe/ante hobe(ekhane amra github theke abar web.php er code gual copy kore niye eshchi). taile abar amra home ta pabo jeheto route add kora hoyeche ekn. Laravel-Breeze install korar por amader project er "Controller" folder er moddhe "Auth" name ekta folder chole asbe jar moddhe breeze er sob controller thakbe, ar "resources/views" er moddheo "auth" name ekta folder chole asbe jar moddhe breeze er sob view blade file gula thakbe. e charao "resources/views" er moddhe 'layouts' name e folder, 'components' name e folder & views er root e "dashboard.blade.php" name e ekta file O chole asbe. But ekhane Laravel-Breeze er sob view file mane design gula Tilwind-CSS e kora. amra jodi bootstrap use korte chai taile amader k esob remove kore scratch theke bootstap likte hobe ei file.
 			
@@ -628,12 +631,45 @@
 				-- command: php artisan migrate
 
 
+//------------------------------------------------------- web.php ---------------------------------------------------------------------------------
+				Route::get('/blog/create', [BlogController::class, 'create'])->name('blog.create');
 
 
+//------------------------------------------------------- BlogController.php ---------------------------------------------------------------------------------
+				public function create(){
+						return view('create-blog-post');
+					}
+
+//------------------------------------------------------- create-blog-post.blade.php  -------------------------------------------------------------------
+			@extends('layout')
+
+			@section('main')
+						//content body will go here
+			@endsection
 
 
+//------------------------------------------------------- dashboard.blade.php  -------------------------------------------------------------------
+						<div class="dashboard">
+                            <ul>
+                                <li><a href="{{route('blog.create')}}">Create Post</a></li>
+                                <li><a href="">Create Category</a></li>
+                                <li><a href="">Categories List</a></li>
+                            </ul>
+                        </div>
+						
+	
+//------------------------------------------------------- layout.blade.php  -------------------------------------------------------------------					
+				<ul>
+                    <li><a class="{{Request::routeIs('welcome.index') ? 'active' : ''}}" href="{{route('welcome.index')}}">Home</a></li>
+                    <li><a class="{{Request::routeIs('blog.index') ? 'active' : ''}}" href="{{route('blog.index')}}">Blog</a></li>
+                    <li><a class="{{Request::routeIs('about') ? 'active' : ''}}" href="{{route('about')}}">About</a></li>
+                    <li><a class="{{Request::routeIs('contact.index') ? 'active' : ''}}" href="{{route('contact.index')}}">Contact</a></li>
+                    @guest
+                    <li><a class="{{Request::routeIs('login') ? 'active' : ''}}" href="{{route('login')}}">Login</a></li>
+                    <li><a class="{{Request::routeIs('register') ? 'active' : ''}}" href="{{route('register')}}">Register</a></li>
+                    @endguest
 
-
-
-
-
+                    @auth
+                    <li><a class="{{Request::routeIs('dashboard') ? 'active' : ''}}" href="{{route('dashboard')}}">Dashboard</a></li>
+                    @endauth
+                </ul>
