@@ -10,23 +10,46 @@
     <section id="contact-us">
         <h1 style="padding-top: 50px;">Create New Post!</h1>
 
+        @if (session('status'))
+            <p style="color: #fff; width:100%; font-size:18px; font-weight:600; text-align:center; background:#5cb85c;padding:17px 0; margin-bottom:6px;">
+                {{ session('status') }}
+            </p>
+        @endif
+
         <!-- Contact Form -->
         <div class="contact-form" style="padding-left:40px; padding-right:40px; padding-bottom:20px;">
-            <form action="" method="">
-                <!-- Title -->
-                <label for="title"><span>Title</span></label>
-                <input type="text" id="title" name="title" />
+            <form action="{{route('blog.store')}}" method="post" enctype="multipart/form-data">
+                @csrf
+                    <!-- Title -->
+                    <label for="title"><span>Title</span></label>
+                    <input type="text" id="title" name="title" value="{{old('title')}}"/>
 
-                <!-- Image -->
-                <label for="image"><span>Image</span></label>
-                <input type="file" id="image" name="image" />
+                    @error('title')
+                    {{-- The $attributeValue field is/must be $validationRule --}}
+                        <p style="color: red; margin-bottom:25px;">{{$message}}</p>
+                    @enderror
 
-                <!-- Body-->
-                <label for="body"><span>Body</span></label>
-                <textarea id="body" name="body"></textarea>
+                    <!-- Image -->
+                    <label for="image"><span>Image</span></label>
+                    <input type="file" id="image" name="image" />
 
-                <!-- Button -->
-                <input type="submit" value="Submit" />
+                    @error('image')
+                    {{-- The $attributeValue field is/must be $validationRule --}}
+                        <p style="color: red; margin-bottom:25px;">{{$message}}</p>
+                    @enderror
+
+                    <!-- Body-->
+                    <label for="body"><span>Body</span></label>
+                    <textarea id="body" name="body">{{old('body')}}</textarea>
+
+                    @error('body')
+                    {{-- The $attributeValue field is/must be $validationRule --}}
+                        <p style="color: red; margin-bottom:25px;">{{$message}}</p>
+                    @enderror
+
+
+                    <!-- Button -->
+                    <input type="submit" value="Submit" />
             </form>
         </div>
 
