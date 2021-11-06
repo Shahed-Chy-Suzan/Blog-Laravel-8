@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2021 at 08:23 PM
+-- Generation Time: Nov 06, 2021 at 08:54 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -107,6 +107,15 @@ CREATE TABLE `posts` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`id`, `title`, `slug`, `user_id`, `imagePath`, `body`, `created_at`, `updated_at`) VALUES
+(1, 'Demo Title', 'demo-title', 1, 'storage/postsImages/huMEHbg1b20qqwDtrXEzcfbMiivOgIheyfmGfEPs.png', '<p>Demo Body</p>', '2021-11-06 01:40:23', '2021-11-06 01:40:23'),
+(2, 'T-Shirt', 't-shirt', 1, 'storage/postsImages/wFH5CmDu9JSYZiGE66vpTE3TlFFPyBNJtZsyPbdk.png', '<p>T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt</p>', '2021-11-06 01:43:48', '2021-11-06 01:43:48'),
+(3, 'Sunglass', 'sunglass', 1, 'storage/postsImages/Y0Z3i3Oe5V67t6cdn30qVkDq3bBoLpEe5AzTJgIA.png', '<p>Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;</p>', '2021-11-06 01:48:03', '2021-11-06 01:48:03');
+
 -- --------------------------------------------------------
 
 --
@@ -203,7 +212,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -35,7 +35,7 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------
 			//-- <a class="{{Request::routeIs('about') ? 'active' : ''}}" href="{{route('about')}}">About</a>
 			
-			//-- <input type="text" id="title" name="title" />
+			//-- <input type="text" id="title" name="title" value="{{old('title')}}"/>
 					--------------------------
 					-- in controller: ----
 							$request->validate([
@@ -80,27 +80,29 @@
 			//-- 
 				   
 			//--------------------------- file upload using store() method in storage -----------------------------------
-			//--amra eikhane ( $request->file('image')->store('public'); ) ei line ta likha mane holo: user er form-request theke first e image ta k dhorechi then ota k store korechi store('public') method er maddhome ja store hobe hocceh "storage/app/public" folder e, ekn amra jodi chai j amader ei upload kora file/image gula evabe "storage/app/public" folder e randomly rakbo na, new folder create kore ermoddhe rakbo taile amra code likbo: ( $request->file('image')->store('postsImages', 'public'); ). ekhane store() method e first perameter ta diye folder er name bojano hoyeche jeta create kora hobe. //--Ekn evabe amader upload kora protita file "storage/app/public/postsImages" e joma/store hobe, but amra jokon file/image access korte jai amra jani Laravel ta asset() mane project root e "public" folder k target/focus kore, tai amader k ekn ei upload kora image/file gula k  access korar jonno ei  "storage/app/public/postsImages" tar ekta link copy banate hobe project root e "public" folder e. ar eta ama ekta command er maddhome easily korte pari, ta holo: ( command:  php artisan storage:link ). ekn taile amader agher storage folder er directory tar ekta copy link hoye jabe amader project root e "public" folder e ar ta hobe ("public/storage/postsImages"). Ekn amader jodi kono Image/file access/show korte chai taile amader k path(pic ta j public folder er 'storage/postsImages' er vitore ache) ta bole access korte hobe, So final code ta hobe: ( $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');  ) .//-- ar evabe upload/input neya protita image/file e unique name e save hoye automatic, so name conflict er kono problem thakbe na.
+					//--YouTube_link: https://www.youtube.com/watch?v=rvhZRbM966I&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=20
+					//--amra eikhane ( $request->file('image')->store('public'); ) ei line ta likha mane holo: user er form-request theke first e image ta k dhorechi then ota k store korechi store('public') method er maddhome ja store hobe hocceh "storage/app/public" folder e, ekn amra jodi chai j amader ei upload kora file/image gula evabe "storage/app/public" folder e randomly rakbo na, new folder create kore ermoddhe rakbo taile amra code likbo: ( $request->file('image')->store('postsImages', 'public'); ). ekhane store() method e first perameter ta diye folder er name bojano hoyeche jeta create kora hobe. //--Ekn evabe amader upload kora protita file "storage/app/public/postsImages" e joma/store hobe, but amra jokon file/image access korte jai amra jani Laravel ta asset() mane project root e "public" folder k target/focus kore, tai amader k ekn ei upload kora image/file gula k  access korar jonno ei  "storage/app/public/postsImages" tar ekta link copy banate hobe project root e "public" folder e. ar eta ama ekta command er maddhome easily korte pari, ta holo: ( command:  php artisan storage:link ). ekn taile amader agher storage folder er directory tar ekta copy link hoye jabe amader project root e "public" folder e ar ta hobe ("public/storage/postsImages"). Ekn amader jodi kono Image/file access/show korte chai taile amader k path(pic ta j public folder er 'storage/postsImages' er vitore ache) ta bole access korte hobe, So final code ta hobe: ( $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');  ) .//-- ar evabe upload/input neya protita image/file e unique name e save hoye automatic, so name conflict er kono problem thakbe na.
 			
-						-- $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public'); 
-						-- php artisan storage:link
+							-- $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public'); 
+							-- php artisan storage:link
 
-						--	public function store(Request $request){
-								$request->validate([
-									'image' => 'required | image',
-								]);
+							--	public function store(Request $request){
+									$request->validate([
+										'image' => 'required | image',
+									]);
 
-							   //File upload
-							   $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');
+								   //File upload
+								   $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');
 
-							   $post = new Post();								//file er opore Model: use App\Models\Post; add kore dithe hobe
-							   $post->imagePath = $imagePath;
-							   $post->save();
-							   return redirect()->back();
-							 }
+								   $post = new Post();								//file er opore Model: use App\Models\Post; add kore dithe hobe
+								   $post->imagePath = $imagePath;
+								   $post->save();
+								   return redirect()->back();
+								 }
 
-			//-- 	Integrating CKEditor with Laravel
+			//------------------------------------------------ Integrating CKEditor with Laravel --------------------------------------------
 						//--Documentation_link: http://cdn.ckeditor.com/
+						//--YouTube Link: https://www.youtube.com/watch?v=pwRuVMk63Xc&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=12
 			
 						//--Example: 
 									<!DOCTYPE html>
@@ -117,6 +119,43 @@
 													</script>
 											</body>
 									</html>
+									
+			//---------------------------------------------------- show the relationships using tinker -----------------------------------------------------------
+						//--YouTube_link: https://www.youtube.com/watch?v=dKKdLrhaI0o&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=23
+						php artisan tinker
+						>>> $post = App\Models\Post::find(1)
+
+						PS D:\DevApps\php74\htdocs\blog-laravel8> php artisan tinker
+						Psy Shell v0.10.9 (PHP 7.4.2 — cli) by Justin Hileman
+						>>> $post = App\Models\Post::find(1)
+						=> App\Models\Post {#4342
+							 id: 1,
+							 title: "Demo Title",
+							 slug: "demo-title",
+							 user_id: 1,
+							 imagePath: "storage/postsImages/huMEHbg1b20qqwDtrXEzcfbMiivOgIheyfmGfEPs.png",
+							 body: "<p>Demo Body</p>",
+							 created_at: "2021-11-06 07:40:23",
+							 updated_at: "2021-11-06 07:40:23",
+						   }
+						   
+						 >>> $post->user
+						 => App\Models\User {#4238
+							 id: 1,
+							 name: "Admin",
+							 email: "admin@gmail.com",
+							 email_verified_at: null,
+							 #password: "$2y$10$ZtQmLqpbG/xFuTKLiyD4tOo.mDc1B9JfQDtwCdb8m3Ih.kdxb7buS",
+							 #remember_token: "vCwFseJ68wn3t8BBAKjzRt4WhmfRZjQB7IOWd2fPuOvhQ2P17130MOb49PzC",
+							 created_at: "2021-11-05 18:40:12",
+							 updated_at: "2021-11-05 18:40:12",
+						   }
+						>>>$post->user->name
+						 => "Admin"
+
+			//--
+
+
 
 //------------//------------//------------//---------------//---------------//-------------//-----------//------------//--------------//---------
 
@@ -698,6 +737,8 @@
 
 
 
+//================================== Createing Post ====================================================
+
 
 //----------------------------------------- database/migrations/posts_table.php ----------------------------------------------------------
 			
@@ -721,10 +762,23 @@
 				Route::post('/blog/store', [BlogController::class, 'store'])->name('blog.store');
 
 //------------------------------------------------------- Modals/Post ---------------------------------------------------------------------------------
-			-- php artisan make:model Post
+				// We have post and it belongsTo a user
+				public function user(){
+					return $this->belongsTo(User::class);
+				}
+
+//------------------------------------------------------- Modals/User ---------------------------------------------------------------------------------
+				// We have a user and a user hasMany posts
+				public function posts(){
+					return $this->hasMany(Post::class);
+				}
 
 //------------------------------------------------------- BlogController.php ---------------------------------------------------------------------------------
-				public function store(Request $request){
+			use Illuminate\Support\Facades\Auth;
+			use Illuminate\Support\Str;
+			use App\Models\Post;
+			
+			public function store(Request $request){
 					// $allInputs = $request->all();   //sokol input niye nibe
 					// dd($allInputs);
 
@@ -741,6 +795,25 @@
 						'image' => 'required | image',
 						'body' => 'required'
 					]);
+
+				   $title = $request->input('title');
+				   $slug = Str::slug($title, '-');
+				   $user_id = Auth::user()->id;
+				   $body = $request->input('body');
+
+				   //File upload
+				   $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public'); //php artisan storage:link
+
+				   $post = new Post();
+				   $post->title = $title;
+				   $post->slug = $slug;
+				   $post->user_id = $user_id;
+				   $post->body = $body;
+				   $post->imagePath = $imagePath;
+
+				   $post->save();
+
+				   return redirect()->back()->with('status', 'Post Created Successfully');
 				 }
 
 //---------------------------------------------- resources/lang/en/validation.php  -------------------------------------------------------------------
@@ -758,74 +831,73 @@
 					],
 
 //------------------------------------------------------- create-blog-post.blade.php  -------------------------------------------------------------------
-			@extends('layout')
+				@extends('layout')
 
-			@section('main')
-						//content body will go here
-			@endsection
-			
-			//------------------------------------------//----------------
-			
-			@extends('layout')
+				@section('head')
+					<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+				@endsection
 
-			@section('head')
-				<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-			@endsection
+				@section('main')
 
-			@section('main')
+				<main class="container" style="background-color: #fff;">
+					<section id="contact-us">
+						<h1 style="padding-top: 50px;">Create New Post!</h1>
 
-			<main class="container" style="background-color: #fff;">
-				<section id="contact-us">
-					<h1 style="padding-top: 50px;">Create New Post!</h1>
+						@if (session('status'))
+							<p style="color: #fff; width:100%; font-size:18px; font-weight:600; text-align:center; background:#5cb85c;padding:17px 0; margin-bottom:6px;">
+								{{ session('status') }}
+							</p>
+						@endif
 
-					<!-- Contact Form -->
-					<div class="contact-form" style="padding-left:40px; padding-right:40px; padding-bottom:20px;">
-						<form action="{{route('blog.store')}}" method="post" enctype="multipart/form-data">
-							@csrf
-								<!-- Title -->
-								<label for="title"><span>Title</span></label>
-								<input type="text" id="title" name="title" value="{{old('title')}}"/>
+						<!-- Contact Form -->
+						<div class="contact-form" style="padding-left:40px; padding-right:40px; padding-bottom:20px;">
+							<form action="{{route('blog.store')}}" method="post" enctype="multipart/form-data">
+								@csrf
+									<!-- Title -->
+									<label for="title"><span>Title</span></label>
+									<input type="text" id="title" name="title" value="{{old('title')}}"/>
 
-								@error('title')
-								{{-- The $attributeValue field is/must be $validationRule --}}
-									<p style="color: red; margin-bottom:25px;">{{$message}}</p>
-								@enderror
+									@error('title')
+									{{-- The $attributeValue field is/must be $validationRule --}}
+										<p style="color: red; margin-bottom:25px;">{{$message}}</p>
+									@enderror
 
-								<!-- Image -->
-								<label for="image"><span>Image</span></label>
-								<input type="file" id="image" name="image" />
+									<!-- Image -->
+									<label for="image"><span>Image</span></label>
+									<input type="file" id="image" name="image" />
 
-								@error('image')
-								{{-- The $attributeValue field is/must be $validationRule --}}
-									<p style="color: red; margin-bottom:25px;">{{$message}}</p>
-								@enderror
+									@error('image')
+									{{-- The $attributeValue field is/must be $validationRule --}}
+										<p style="color: red; margin-bottom:25px;">{{$message}}</p>
+									@enderror
 
-								<!-- Body-->
-								<label for="body"><span>Body</span></label>
-								<textarea id="body" name="body">{{old('body')}}</textarea>
+									<!-- Body-->
+									<label for="body"><span>Body</span></label>
+									<textarea id="body" name="body">{{old('body')}}</textarea>
 
-								@error('body')
-								{{-- The $attributeValue field is/must be $validationRule --}}
-									<p style="color: red; margin-bottom:25px;">{{$message}}</p>
-								@enderror
+									@error('body')
+									{{-- The $attributeValue field is/must be $validationRule --}}
+										<p style="color: red; margin-bottom:25px;">{{$message}}</p>
+									@enderror
 
 
-								<!-- Button -->
-								<input type="submit" value="Submit" />
-						</form>
-					</div>
+									<!-- Button -->
+									<input type="submit" value="Submit" />
+							</form>
+						</div>
 
-				</section>
-			</main>
+					</section>
+				</main>
 
-			@endsection
+				@endsection
 
 
-			@section('scripts')
-				<script>
-					CKEDITOR.replace( 'body' );
-				</script>
-			@endsection
+				@section('scripts')
+					<script>
+						CKEDITOR.replace( 'body' );
+					</script>
+				@endsection
+
 
 
 
@@ -862,6 +934,7 @@
 												*******	  Integrating CKEditor with Laravel		*******
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------			
 			//--Documentation_link: http://cdn.ckeditor.com/
+			//--YouTube Link: https://www.youtube.com/watch?v=pwRuVMk63Xc&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=12
 			
 			//--Example: 
 						<!DOCTYPE html>
@@ -886,6 +959,7 @@
 												*****	  file upload using store() method in storage	*****
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 			//--------------------------- file upload using store() method in storage -----------------------------------
+			//--YouTube_link: https://www.youtube.com/watch?v=rvhZRbM966I&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=20
 			//--amra eikhane ( $request->file('image')->store('public'); ) ei line ta likha mane holo: user er form-request theke first e image ta k dhorechi then ota k store korechi store('public') method er maddhome ja store hobe hocceh "storage/app/public" folder e, ekn amra jodi chai j amader ei upload kora file/image gula evabe "storage/app/public" folder e randomly rakbo na, new folder create kore ermoddhe rakbo taile amra code likbo: ( $request->file('image')->store('postsImages', 'public'); ). ekhane store() method e first perameter ta diye folder er name bojano hoyeche jeta create kora hobe. //--Ekn evabe amader upload kora protita file "storage/app/public/postsImages" e joma/store hobe, but amra jokon file/image access korte jai amra jani Laravel ta asset() mane project root e "public" folder k target/focus kore, tai amader k ekn ei upload kora image/file gula k  access korar jonno ei  "storage/app/public/postsImages" tar ekta link copy banate hobe project root e "public" folder e. ar eta ama ekta command er maddhome easily korte pari, ta holo: ( command:  php artisan storage:link ). ekn taile amader agher storage folder er directory tar ekta copy link hoye jabe amader project root e "public" folder e ar ta hobe ("public/storage/postsImages"). Ekn amader jodi kono Image/file access/show korte chai taile amader k path(pic ta j public folder er 'storage/postsImages' er vitore ache) ta bole access korte hobe, So final code ta hobe: ( $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');  ).//-- ar evabe upload/input neya protita image/file e unique name e save hoye automatic, so name conflict er kono problem thakbe na.
 			
 						-- $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public'); 
