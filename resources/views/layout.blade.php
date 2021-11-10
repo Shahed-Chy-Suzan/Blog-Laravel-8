@@ -71,7 +71,7 @@
 
 
         <!-- Main footer -->
-        <footer class="main-footer">
+        <footer class="main-footer" style="border-top:1px solid rgb(39, 39, 39);">
             <div>
                 <a href=""><i class="fab fa-facebook-f"></i></a>
                 <a href=""><i class="fab fa-instagram"></i></a>

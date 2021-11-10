@@ -990,12 +990,17 @@
 					use App\Models\Post;
 					
 					public function index(){
-						$posts = Post::all();
+						// $posts = Post::all();
+						$posts = Post::latest()->get();
 						return view('blogPosts.blog', compact('posts'));
 					}
 					
-					public function show($slug){
-						$post = Post::where('slug', $slug)->first();
+					// public function show($slug){
+					//     $post = Post::where('slug', $slug)->first();
+					//     return view('blogPosts.single-blog-post', compact('post'));
+					// }
+					//---------- Using Route model binding -----------
+					public function show(Post $post){	                       //this $post from route parameter
 						return view('blogPosts.single-blog-post', compact('post'));
 					}
 				
@@ -1058,7 +1063,25 @@
 				  </section>		
 							
 							
-							
+
+//------------------------------------------------------------ WelcomeController -----------------------------------------------------------------------			
+				use App\Models\Post;
+
+				class WelcomeController extends Controller
+				{
+					public function index(){
+						$posts = Post::latest()->take(4)->get();
+						return view('welcome', compact('posts'));
+					}
+				}		
+				
+
+//============================= Route Model Binding ============================================================
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
 				
 				
 				
