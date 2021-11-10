@@ -70,8 +70,6 @@
 			
 			//-- $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');	
 						//kono user delete korle tar sob post delete hoye jabe etai holo onDelete('cascade') er kaj.
-						
-			//-- php artisan route:list  //eta dhara amra amader project er kon url kon route name diye ache ta dekte pari.
 			
 			//-- use Illuminate\Support\Str;			//file er opore add kore dithe hobe,
 					$title = $request->input('title');	//title ta input form er request theke dhorlam/nilam
@@ -81,7 +79,7 @@
 				   
 			//--------------------------- file upload using store() method in storage -----------------------------------
 					//--YouTube_link: https://www.youtube.com/watch?v=rvhZRbM966I&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=20
-					//--amra eikhane ( $request->file('image')->store('public'); ) ei line ta likha mane holo: user er form-request theke first e image ta k dhorechi then ota k store korechi store('public') method er maddhome ja store hobe hocceh "storage/app/public" folder e, ekn amra jodi chai j amader ei upload kora file/image gula evabe "storage/app/public" folder e randomly rakbo na, new folder create kore ermoddhe rakbo taile amra code likbo: ( $request->file('image')->store('postsImages', 'public'); ). ekhane store() method e first perameter ta diye folder er name bojano hoyeche jeta create kora hobe. //--Ekn evabe amader upload kora protita file "storage/app/public/postsImages" e joma/store hobe, but amra jokon file/image access korte jai amra jani Laravel ta asset() mane project root e "public" folder k target/focus kore, tai amader k ekn ei upload kora image/file gula k  access korar jonno ei  "storage/app/public/postsImages" tar ekta link copy banate hobe project root e "public" folder e. ar eta ama ekta command er maddhome easily korte pari, ta holo: ( command:  php artisan storage:link ). ekn taile amader agher storage folder er directory tar ekta copy link hoye jabe amader project root e "public" folder e ar ta hobe ("public/storage/postsImages"). Ekn amader jodi kono Image/file access/show korte chai taile amader k path(pic ta j public folder er 'storage/postsImages' er vitore ache) ta bole access korte hobe, So final code ta hobe: ( $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');  ) .//-- ar evabe upload/input neya protita image/file e unique name e save hoye automatic, so name conflict er kono problem thakbe na.
+					//--amra eikhane ( $request->file('image')->store('public'); ) ei line ta likha mane holo: user er form-request theke first e image ta k dhorechi then ota k store korechi store('public') method er maddhome ja store hobe hocceh "storage/app/public" folder e, ekn amra jodi chai j amader ei upload kora file/image gula evabe "storage/app/public" folder e randomly rakbo na, new folder create kore ermoddhe rakbo taile amra code likbo: ( $request->file('image')->store('postsImages', 'public'); ). ekhane store() method e first perameter ta diye folder er name bojano hoyeche jeta create kora hobe. //--Ekn evabe amader upload kora protita file "storage/app/public/postsImages" e joma/store hobe, but amra jokon file/image access korte jai amra jani Laravel ta asset() mane project root e "public" folder k target/focus kore, tai amader k ekn ei upload kora image/file gula k  access korar jonno ei  "storage/app/public/postsImages" tar ekta link copy banate hobe project root e "public" folder e. ar eta amra ekta command er maddhome easily korte pari, ta holo: ( command:  php artisan storage:link ). ekn taile amader agher storage folder er directory tar ekta copy link hoye jabe amader project root e "public" folder e ar ta hobe ("public/storage/postsImages"). Ekn amader jodi kono Image/file access/show korte chai taile amader k path(pic ta j public folder er 'storage/postsImages' er vitore ache) ta bole access korte hobe, So final code ta hobe: ( $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');  ) .//-- ar evabe upload/input neya protita image/file e unique name e save hoye jabe automatic, so name conflict er kono problem thakbe na.
 			
 							-- $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public'); 
 							-- php artisan storage:link
@@ -158,6 +156,9 @@
 
 
 //------------//------------//------------//---------------//---------------//-------------//-----------//------------//--------------//---------
+//------------//------------//------------//---------------//---------------//-------------//-----------//------------//--------------//---------
+
+
 
 
 
@@ -983,12 +984,81 @@
 				
 				
 				
+//========================================= Displaying Posts Dynamically with slug =======================================
+
+//---------------------------------------------- app/Http/Controllers/BlogController.php  -----------------------------------------------------
+					use App\Models\Post;
+					
+					public function index(){
+						$posts = Post::all();
+						return view('blogPosts.blog', compact('posts'));
+					}
+					
+					public function show($slug){
+						$post = Post::where('slug', $slug)->first();
+						return view('blogPosts.single-blog-post', compact('post'));
+					}
 				
 				
 				
+//--------------------------------------- resources/views/blogPosts/blog.blade.php -------------------------------------------------------				
+				        @foreach ($posts as $post )
+							<div class="card-blog-content">
+								<img src="{{asset($post->imagePath)}}" alt="" />
+								<p>
+									{{$post->created_at->diffForHumans()}}
+									<span>Written By {{$post->user->name}}</span>
+								</p>
+								<h4>
+									<a href="{{route('blog.show', $post)}}">{{$post->title}}</a>
+								</h4>
+							</div>
+						@endforeach
+
+				
+//------------------------------------------------------------ routes/web.php ----------------------------------------------------------------------
+				Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 				
 				
 				
+//-------------------------------------------- resources/views/blogPosts/single-blog-post.blade.php -------------------------------------		
+				      <section class="single-blog-post">
+						<h1>{{$post->title}}</h1>
+
+						<p class="time-and-author">
+							{{$post->created_at->diffForHumans()}}
+							<span>Written By {{$post->user->name}}</span>
+						</p>
+
+						<div class="single-blog-post-ContentImage" data-aos="fade-left">
+							<img src="{{asset($post->imagePath)}}" alt="" />
+						</div>
+
+						<div class="about-text">
+							{!!$post->body!!}
+						</div>
+					  </section>
+				
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------
+				  <section class="cards-blog latest-blog">
+
+					@foreach ($posts as $post )
+						<div class="card-blog-content">
+							<img src="{{asset($post->imagePath)}}" alt="" />
+							<p>
+								{{$post->created_at->diffForHumans()}}
+								<span>Written By {{$post->user->name}}</span>
+							</p>
+							<h4>
+								<a href="{{route('blog.show', $post)}}">{{$post->title}}</a>
+							</h4>
+						</div>
+					@endforeach
+
+				  </section>		
+							
+							
+							
 				
 				
 				
