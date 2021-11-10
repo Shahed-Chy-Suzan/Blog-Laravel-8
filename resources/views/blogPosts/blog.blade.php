@@ -32,7 +32,8 @@
 
         <section class="cards-blog latest-blog">
 
-            @foreach ($posts as $post)
+            {{-- @foreach ($posts as $post) --}}
+            @forelse($posts as $post)
                 <div class="card-blog-content">
                     @auth
                         @if (auth()->user()->id === $post->user->id)
@@ -55,7 +56,11 @@
                         <a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
                     </h4>
                 </div>
-            @endforeach
+
+                @empty
+                <p>Sorry, currently there is no blog post related to that search!</p>
+            @endforelse
+            {{-- @endforeach --}}
 
         </section>
 

@@ -1276,6 +1276,77 @@
 							</button>
 						</form>
 					</div>			
+					.................		.................		..................			......................
+					<section class="cards-blog latest-blog">
+
+						@foreach ($posts as $post)
+							<div class="card-blog-content">
+								@auth
+									@if (auth()->user()->id === $post->user->id)
+										<div class="post-buttons">
+											<a href="{{route('blog.edit', $post)}}">Edit</a>
+											<form action="{{ route('blog.delete', $post) }}" method="post">
+												@csrf
+												@method('delete')
+												<input type="submit" value=" Delete">
+											</form>
+										</div>
+									@endif
+								@endauth
+								<img src="{{ asset($post->imagePath) }}" alt="" />
+								<p>
+									{{ $post->created_at->diffForHumans() }}
+									<span>Written By {{ $post->user->name }}</span>
+								</p>
+								<h4>
+									<a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
+								</h4>
+							</div>
+						@endforeach
+
+					</section>
+					
+		//----ekn jodi amra chai je amader ekhane search result na asle amader kicho ekta bolbe, suppose bolbe j "No result found", taile amader k code ta likte hobe:
+		
+							{{-- @foreach ($posts as $post) --}}
+							@forelse($posts as $post)
+								<div class="card-blog-content">
+									@auth
+										@if (auth()->user()->id === $post->user->id)
+											<div class="post-buttons">
+												<a href="{{route('blog.edit', $post)}}">Edit</a>
+												<form action="{{ route('blog.delete', $post) }}" method="post">
+													@csrf
+													@method('delete')
+													<input type="submit" value=" Delete">
+												</form>
+											</div>
+										@endif
+									@endauth
+									<img src="{{ asset($post->imagePath) }}" alt="" />
+									<p>
+										{{ $post->created_at->diffForHumans() }}
+										<span>Written By {{ $post->user->name }}</span>
+									</p>
+									<h4>
+										<a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
+									</h4>
+								</div>
+
+								@empty
+								<p>Sorry, currently there is no blog post related to that search!</p>
+							@endforelse
+							{{-- @endforeach --}}
+							
+						//-------------------------for shortcut-----------------
+								{{-- @foreach ($posts as $post) --}}
+								@forelse($posts as $post)
+										//code loop will go here...//
+									@empty
+									<p>Sorry, currently there is no blog post related to that search!</p>
+								@endforelse
+								{{-- @endforeach --}}
+								
 //------------------------------------------------app/Http/Controllers/BlogController.php -----------------------------------------------------------------------					
 				    //fetching all data from db
 					// public function index(){
