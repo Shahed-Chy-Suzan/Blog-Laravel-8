@@ -9,6 +9,12 @@ use App\Models\Post;
 
 class BlogController extends Controller
 {
+    public function __construct()
+    {
+       $this->middleware('auth')->except(['index']);
+    }
+
+    
     public function index(){
         // $posts = Post::all();
         $posts = Post::latest()->get();

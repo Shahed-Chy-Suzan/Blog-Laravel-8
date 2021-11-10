@@ -555,6 +555,14 @@
 											})->middleware(['auth'])->name('dashboard');
 
 											require __DIR__.'/auth.php';
+			//-----------------------------------------------------------------------					
+			//------------ apply middleware ------------------					
+					-- Route::get('/blog/create', [BlogController::class, 'create'])->name('blog.create')->middleware('auth');
+					------ or in controller----------
+					public function __construct()
+					{
+					   $this->middleware('auth')->except(['index']);
+					}
 
 //-------------------//----------------//---------------------//-------------------//------------------//------------------//------------//-------------//--
 
@@ -798,7 +806,9 @@
 					]);
 
 				   $title = $request->input('title');
-				   $slug = Str::slug($title, '-');
+				   //$slug = Str::slug($title, '-');
+				   $postId = Post::latest()->take(1)->first()->id + 1;
+				   $slug = Str::slug($title, '-') . '-' . $postId;
 				   $user_id = Auth::user()->id;
 				   $body = $request->input('body');
 
@@ -989,6 +999,11 @@
 //---------------------------------------------- app/Http/Controllers/BlogController.php  -----------------------------------------------------
 					use App\Models\Post;
 					
+					public function __construct()
+					{
+					   $this->middleware('auth')->except(['index']);
+					}
+	
 					public function index(){
 						// $posts = Post::all();
 						$posts = Post::latest()->get();
