@@ -16,7 +16,11 @@
 
     <!-- CKEditor CDN -->
     {{-- <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script> --}}
+
     @yield('head')
+
+    {{-- Tailwind CDN --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
 </head>
 
 <body>
