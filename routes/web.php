@@ -45,6 +45,9 @@ Route::get('/blog/{post}/edit', [BlogController::class, 'edit'])->name('blog.edi
 // To update single blog post
 Route::put('/blog/{post}/update', [BlogController::class, 'update'])->name('blog.update');
 
+// To update single blog post
+Route::delete('/blog/{post}', [BlogController::class, 'delete'])->name('blog.delete');
+
 // To store blog post to the DB
 Route::post('/blog/store', [BlogController::class, 'store'])->name('blog.store');
 

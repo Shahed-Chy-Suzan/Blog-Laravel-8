@@ -118,4 +118,10 @@ class BlogController extends Controller
     public function show(Post $post){                       //this $post from route parameter
         return view('blogPosts.single-blog-post', compact('post'));
     }
+
+
+    public function delete(Post $post){
+        $post->delete();
+        return redirect()->back()->with('status', 'Post Delete Successfully');
+    }
 }
