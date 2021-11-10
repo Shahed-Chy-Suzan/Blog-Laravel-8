@@ -16,9 +16,11 @@ class BlogController extends Controller
     }
 
 
+
     public function create(){
         return view('blogPosts.create-blog-post');
     }
+
 
 
     public function store(Request $request){
@@ -40,7 +42,9 @@ class BlogController extends Controller
         ]);
 
        $title = $request->input('title');
-       $slug = Str::slug($title, '-');
+       //$slug = Str::slug($title, '-');
+       $postId = Post::latest()->take(1)->first()->id + 1;
+       $slug = Str::slug($title, '-') . '-' . $postId;
        $user_id = Auth::user()->id;
        $body = $request->input('body');
 
@@ -58,6 +62,8 @@ class BlogController extends Controller
 
        return redirect()->back()->with('status', 'Post Created Successfully');
     }
+
+
 
 
     // public function show($slug){

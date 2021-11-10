@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2021 at 08:54 AM
+-- Generation Time: Nov 10, 2021 at 11:32 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -114,7 +114,8 @@ CREATE TABLE `posts` (
 INSERT INTO `posts` (`id`, `title`, `slug`, `user_id`, `imagePath`, `body`, `created_at`, `updated_at`) VALUES
 (1, 'Demo Title', 'demo-title', 1, 'storage/postsImages/huMEHbg1b20qqwDtrXEzcfbMiivOgIheyfmGfEPs.png', '<p>Demo Body</p>', '2021-11-06 01:40:23', '2021-11-06 01:40:23'),
 (2, 'T-Shirt', 't-shirt', 1, 'storage/postsImages/wFH5CmDu9JSYZiGE66vpTE3TlFFPyBNJtZsyPbdk.png', '<p>T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt&nbsp;T-Shirt</p>', '2021-11-06 01:43:48', '2021-11-06 01:43:48'),
-(3, 'Sunglass', 'sunglass', 1, 'storage/postsImages/Y0Z3i3Oe5V67t6cdn30qVkDq3bBoLpEe5AzTJgIA.png', '<p>Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;</p>', '2021-11-06 01:48:03', '2021-11-06 01:48:03');
+(3, 'Sunglass', 'sunglass', 1, 'storage/postsImages/Y0Z3i3Oe5V67t6cdn30qVkDq3bBoLpEe5AzTJgIA.png', '<p>Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;Sunglass&nbsp;</p>', '2021-11-06 01:48:03', '2021-11-06 01:48:03'),
+(4, 'last post', 'last-post-4', 1, 'storage/postsImages/7zaMWbzfc7z4PhD3QD4r66tPx7vkUZsHJxmfJO0Q.jpg', '<p>last post&nbsp;last post&nbsp;last post&nbsp;last post&nbsp;last post</p>', '2021-11-10 04:31:47', '2021-11-10 04:31:47');
 
 -- --------------------------------------------------------
 
@@ -138,7 +139,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$ZtQmLqpbG/xFuTKLiyD4tOo.mDc1B9JfQDtwCdb8m3Ih.kdxb7buS', 'vCwFseJ68wn3t8BBAKjzRt4WhmfRZjQB7IOWd2fPuOvhQ2P17130MOb49PzC', '2021-11-05 12:40:12', '2021-11-05 12:40:12'),
+(1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$ZtQmLqpbG/xFuTKLiyD4tOo.mDc1B9JfQDtwCdb8m3Ih.kdxb7buS', 'cPadXUFDDp9lsC43Gqv3DPWzqT1KgEk9luqg6jRy9rtu7rgI1Cc5lM3SrEkW', '2021-11-05 12:40:12', '2021-11-05 12:40:12'),
 (2, 'User', 'user@gmail.com', NULL, '$2y$10$PcgqM5kQTjSOL50tfeBfI.PMPFUmc3N2FVcN7tyft3mXnk/2VABwK', NULL, '2021-11-05 12:41:03', '2021-11-05 12:41:03');
 
 --
@@ -212,7 +213,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
