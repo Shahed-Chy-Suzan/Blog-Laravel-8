@@ -1266,50 +1266,20 @@
 
 
 //=================================== Search || Searching Blog Posts ==============================================
-//------------------------------------------------blog.blade.php -----------------------------------------------------------------------	
-					{{-- Search here --}}
-					<div class="searchbar">
-						<form action="">
-							<input type="text" placeholder="Search..." name="search" />
-							<button type="submit">
-								<i class="fa fa-search"></i>
-							</button>
-						</form>
-					</div>			
-					.................		.................		..................			......................
-					<section class="cards-blog latest-blog">
+	//------------------------------------------------blog.blade.php -----------------------------------------------------------------------	
+						{{-- Search here --}}
+						<div class="searchbar">
+							<form action="">
+								<input type="text" placeholder="Search..." name="search" />
+								<button type="submit">
+									<i class="fa fa-search"></i>
+								</button>
+							</form>
+						</div>			
+						.................		.................		..................			......................
+						<section class="cards-blog latest-blog">
 
-						@foreach ($posts as $post)
-							<div class="card-blog-content">
-								@auth
-									@if (auth()->user()->id === $post->user->id)
-										<div class="post-buttons">
-											<a href="{{route('blog.edit', $post)}}">Edit</a>
-											<form action="{{ route('blog.delete', $post) }}" method="post">
-												@csrf
-												@method('delete')
-												<input type="submit" value=" Delete">
-											</form>
-										</div>
-									@endif
-								@endauth
-								<img src="{{ asset($post->imagePath) }}" alt="" />
-								<p>
-									{{ $post->created_at->diffForHumans() }}
-									<span>Written By {{ $post->user->name }}</span>
-								</p>
-								<h4>
-									<a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
-								</h4>
-							</div>
-						@endforeach
-
-					</section>
-					
-		//----ekn jodi amra chai je amader ekhane search result na asle amader kicho ekta bolbe, suppose bolbe j "No result found", taile amader k code ta likte hobe:
-		
-							{{-- @foreach ($posts as $post) --}}
-							@forelse($posts as $post)
+							@foreach ($posts as $post)
 								<div class="card-blog-content">
 									@auth
 										@if (auth()->user()->id === $post->user->id)
@@ -1332,62 +1302,131 @@
 										<a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
 									</h4>
 								</div>
+							@endforeach
 
-								@empty
-								<p>Sorry, currently there is no blog post related to that search!</p>
-							@endforelse
-							{{-- @endforeach --}}
-							
-						//-------------------------for shortcut-----------------
+						</section>
+						
+			//----ekn jodi amra chai je amader ekhane search result na asle amader kicho ekta bolbe, suppose bolbe j "No result found", taile amader k code ta likte hobe:
+			
 								{{-- @foreach ($posts as $post) --}}
 								@forelse($posts as $post)
-										//code loop will go here...//
+									<div class="card-blog-content">
+										@auth
+											@if (auth()->user()->id === $post->user->id)
+												<div class="post-buttons">
+													<a href="{{route('blog.edit', $post)}}">Edit</a>
+													<form action="{{ route('blog.delete', $post) }}" method="post">
+														@csrf
+														@method('delete')
+														<input type="submit" value=" Delete">
+													</form>
+												</div>
+											@endif
+										@endauth
+										<img src="{{ asset($post->imagePath) }}" alt="" />
+										<p>
+											{{ $post->created_at->diffForHumans() }}
+											<span>Written By {{ $post->user->name }}</span>
+										</p>
+										<h4>
+											<a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
+										</h4>
+									</div>
+
 									@empty
 									<p>Sorry, currently there is no blog post related to that search!</p>
 								@endforelse
 								{{-- @endforeach --}}
 								
-//------------------------------------------------app/Http/Controllers/BlogController.php -----------------------------------------------------------------------					
-				    //fetching all data from db
-					// public function index(){
-					//     // $posts = Post::all();
-					//     $posts = Post::latest()->get();
-					//     return view('blogPosts.blog', compact('posts'));
-					// }
+							//-------------------------for shortcut-----------------
+									{{-- @foreach ($posts as $post) --}}
+									@forelse($posts as $post)
+											//code loop will go here...//
+										@empty
+										<p>Sorry, currently there is no blog post related to that search!</p>
+									@endforelse
+									{{-- @endforeach --}}
+									
+	//------------------------------------------------app/Http/Controllers/BlogController.php -----------------------------------------------------------------------					
+						//fetching all data from db
+						// public function index(){
+						//     // $posts = Post::all();
+						//     $posts = Post::latest()->get();
+						//     return view('blogPosts.blog', compact('posts'));
+						// }
 
-					//fetching all data form db + fetching also search result
-					public function index(Request $request){
-						if($request->search){
-							$posts = Post::where('title', 'like', '%' . $request->search . '%')
-							->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
-						} else{
-							$posts = Post::latest()->get();
+						//fetching all data form db + fetching also search result
+						public function index(Request $request){
+							if($request->search){
+								$posts = Post::where('title', 'like', '%' . $request->search . '%')
+								->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
+							} else{
+								$posts = Post::latest()->get();
+							}
+
+							return view('blogPosts.blog', compact('posts'));
 						}
-
-						return view('blogPosts.blog', compact('posts'));
-					}
-				
-				
+					
+					
 //=========================================== Pagination =====================================================
-//------------------------------------------------ BlogController -----------------------------------------------------------------------		
-					public function index(Request $request){
-						if($request->search){
-							$posts = Post::where('title', 'like', '%' . $request->search . '%')
-									// ->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
-									->orWhere('body', 'like', '%' . $request->search . '%')->latest()->paginate(4);
-						} else{
-							$posts = Post::latest()->paginate(4);
-							// $posts = Post::latest()->get();
-						}
+		//------------------------------------------------ BlogController -----------------------------------------------------------------------		
+							public function index(Request $request){
+								if($request->search){
+									$posts = Post::where('title', 'like', '%' . $request->search . '%')
+											// ->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
+											->orWhere('body', 'like', '%' . $request->search . '%')->latest()->paginate(4);
+								} else{
+									$posts = Post::latest()->paginate(4);
+									// $posts = Post::latest()->get();
+								}
 
-						return view('blogPosts.blog', compact('posts'));
-					}			
-//------------------------------------------------ resources/views/blogPosts/blog.blade.php  -----------------------------------------------------------------------	
-				{{$posts->links()}}				
-//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
-				
-				
-				
-				
+								return view('blogPosts.blog', compact('posts'));
+							}			
+							
+		//------------------------------------------------ resources/views/blogPosts/blog.blade.php  -----------------------------------------------------------------------	
+							{{$posts->links()}}				
+						
+		//------------------------------------------------ resources/views/layout.blade.php -----------------------------------------------------------------------					
+							{{-- Tailwind CDN --}}
+							<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
+						
+
+
+//================================ Customizing Pagination View with Tailwind CSS ===========================================	
+		//--normally amader pagination er default view/design ta ache hocche amader laravel-project er  [\vendor\laravel\framework\src\Illuminate\Pagination\resources\views] ei directory te, So amader k ei view ta amader project er "views" folder er directory te copy kore/niye jaite hobe... So er jonno amader command holo: php artisan vendor:publish --tag=laravel-pagination
+				--command: php artisan vendor:publish --tag=laravel-pagination
+		//--eknn okhande onek(7ta) file royeche, tar moddhe by default laravel pagination design tar jonno "tailwind.blade.php" (resources/views/vendor/pagination/tailwind.blade.php) ei file ta use hoy(default vabe).
+		
+		
+		Copied Directory [\vendor\laravel\framework\src\Illuminate\Pagination\resources\views] To [\resources\views\vendor\pagination]
+		
+		//------------------------------------------------ resources/views/layout.blade.php -----------------------------------------------------------------------					
+							{{-- Tailwind CDN --}}
+							<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
+		//-------------------------------------- resources/views/vendor/pagination/bootstrap-4.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/default.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/semantic-ui.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/simple-bootstrap-4.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/simple-default.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/simple-tailwind.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/tailwind.blade.php -------------------------------------------------------
+		
+		
+		
+//================================ Customizing Pagination View with Bootstrap =============================================			
+		//-------------------------------------- app/Providers/AppServiceProvider.php -------------------------------------------------------
+		//--------------------------------------  public/css/style.css -------------------------------------------------------
+		//-------------------------------------- resources/views/layout.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/bootstrap-4.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/vanilla-css-pagination.blade.php --------------------------------------
+
+
+
+//================================ Customizing Pagination View with Vanilla Css ============================================			
+		//-------------------------------------- app/Providers/AppServiceProvider.php --------------------------------------------------------------------------
+		//-------------------------------------- resources/views/blogPosts/blog.blade.phps ---------------------------------------------------------------
+		//-------------------------------------- resources/views/layout.blade.php --------------------------------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/default.blade.php -------------------------------------------------------
+		//-------------------------------------- resources/views/vendor/pagination/vanilla-css-pagination.blade.php --------------------------------------
 				
 				
