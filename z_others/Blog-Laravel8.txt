@@ -561,9 +561,9 @@
 
 
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//======================================================================================================
 															//-------- Authentication with Laravel Breeze -----------
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//======================================================================================================
 //------------------------------------------------ Authentication with Laravel Breeze ----------------------------------------------------------------
 			//--Laravel-breeze Documentation in Laravel_Doc: https://laravel.com/docs/8.x/starter-kits#laravel-breeze
 			
@@ -966,10 +966,10 @@
 				
 				
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//======================================================================================================
 																	*******	  CKEditor		*******
 												*******	  Integrating CKEditor with Laravel		*******
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------			
+//======================================================================================================	
 			//--Documentation_link: http://cdn.ckeditor.com/
 			//--YouTube Link: https://www.youtube.com/watch?v=pwRuVMk63Xc&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=12
 			
@@ -992,9 +992,9 @@
 
 
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//======================================================================================================
 												*****	  file upload using store() method in storage	*****
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//======================================================================================================
 			//--------------------------- file upload using store() method in storage -----------------------------------
 			//--YouTube_link: https://www.youtube.com/watch?v=rvhZRbM966I&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=20
 			//--amra eikhane ( $request->file('image')->store('public'); ) ei line ta likha mane holo: user er form-request theke first e image ta k dhorechi then ota k store korechi store('public') method er maddhome ja store hobe hocceh "storage/app/public" folder e, ekn amra jodi chai j amader ei upload kora file/image gula evabe "storage/app/public" folder e randomly rakbo na, new folder create kore ermoddhe rakbo taile amra code likbo: ( $request->file('image')->store('postsImages', 'public'); ). ekhane store() method e first perameter ta diye folder er name bojano hoyeche jeta create kora hobe. //--Ekn evabe amader upload kora protita file "storage/app/public/postsImages" e joma/store hobe, but amra jokon file/image access korte jai amra jani Laravel ta asset() mane project root e "public" folder k target/focus kore, tai amader k ekn ei upload kora image/file gula k  access korar jonno ei  "storage/app/public/postsImages" tar ekta link copy banate hobe project root e "public" folder e. ar eta ama ekta command er maddhome easily korte pari, ta holo: ( command:  php artisan storage:link ). ekn taile amader agher storage folder er directory tar ekta copy link hoye jabe amader project root e "public" folder e ar ta hobe ("public/storage/postsImages"). Ekn amader jodi kono Image/file access/show korte chai taile amader k path(pic ta j public folder er 'storage/postsImages' er vitore ache) ta bole access korte hobe, So final code ta hobe: ( $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');  ).//-- ar evabe upload/input neya protita image/file e unique name e save hoye automatic, so name conflict er kono problem thakbe na.
@@ -1367,8 +1367,12 @@
 							return view('blogPosts.blog', compact('posts'));
 						}
 					
-					
-//=========================================== Pagination =====================================================
+
+
+//======================================================================================================
+													//----------------- Pagination -------------------//
+//======================================================================================================
+//------------------------------------------------ Pagination ----------------------------------------------------------------------
 		//------------------------------------------------ BlogController -----------------------------------------------------------------------		
 							public function index(Request $request){
 								if($request->search){
@@ -1395,30 +1399,41 @@
 //================================ Customizing Pagination View with Tailwind CSS ===========================================	
 		//--normally amader pagination er default view/design ta ache hocche amader laravel-project er  [\vendor\laravel\framework\src\Illuminate\Pagination\resources\views] ei directory te, So amader k ei view ta amader project er "views" folder er directory te copy kore/niye jaite hobe... So er jonno amader command holo: php artisan vendor:publish --tag=laravel-pagination
 				--command: php artisan vendor:publish --tag=laravel-pagination
-		//--eknn okhande onek(7ta) file royeche, tar moddhe by default laravel pagination design tar jonno "tailwind.blade.php" (resources/views/vendor/pagination/tailwind.blade.php) ei file ta use hoy(default vabe).
-		
-		
-		Copied Directory [\vendor\laravel\framework\src\Illuminate\Pagination\resources\views] To [\resources\views\vendor\pagination]
+		//--eknn okhande onek(7ta) file royeche, tar moddhe by default laravel pagination design tar jonno "tailwind.blade.php" (resources/views/vendor/pagination/tailwind.blade.php) ei file ta use hoy(default vabe). //--Ekn amra jodi chai j ei tailwind pagination er default color/design gula change korbo taile amra ei file(resources/views/vendor/pagination/tailwind.blade.php) e eshe amader motho change korte pari.
 		
 		//------------------------------------------------ resources/views/layout.blade.php -----------------------------------------------------------------------					
 							{{-- Tailwind CDN --}}
 							<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
-		//-------------------------------------- resources/views/vendor/pagination/bootstrap-4.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/default.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/semantic-ui.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/simple-bootstrap-4.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/simple-default.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/simple-tailwind.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/tailwind.blade.php -------------------------------------------------------
+							
+		//--------- resources/views/vendor/pagination/bootstrap-4.blade.php ------------
+		//--------- resources/views/vendor/pagination/default.blade.php --------------
+		//--------- resources/views/vendor/pagination/semantic-ui.blade.php ------------
+		//--------- resources/views/vendor/pagination/simple-bootstrap-4.blade.php ------------
+		//--------- resources/views/vendor/pagination/simple-default.blade.php ------------
+		//--------- resources/views/vendor/pagination/simple-tailwind.blade.php -------------
+		//--------- resources/views/vendor/pagination/tailwind.blade.php -----------
 		
 		
 		
 //================================ Customizing Pagination View with Bootstrap =============================================			
 		//-------------------------------------- app/Providers/AppServiceProvider.php -------------------------------------------------------
-		//--------------------------------------  public/css/style.css -------------------------------------------------------
+						use Illuminate\Pagination\Paginator;		//-----------------
+						
+						public function boot()
+						{
+							Paginator::useBootstrap();				//--------------------------
+						}
+		//--------------------------------------  public/css/style.css --------------------------------------------------------------------------
+						.pagination {
+							margin: 3rem 3rem;
+						}
 		//-------------------------------------- resources/views/layout.blade.php -------------------------------------------------------
+				//agher Tilwind-CSS er CDN ta comment kore Bootstrap-CDN paste korechi.	
+				{{-- Bootstrap CDN --}}
+				<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+				
 		//-------------------------------------- resources/views/vendor/pagination/bootstrap-4.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/vanilla-css-pagination.blade.php --------------------------------------
+				//--ekn amra jodi chai j ei bootstap pagination er default color/design gula change korbo taile amra ei file(resources/views/vendor/pagination/bootstrap-4.blade.php) e eshe amader motho change korte pari.
 
 
 
