@@ -14,7 +14,7 @@ class BlogController extends Controller
        $this->middleware('auth')->except(['index']);
     }
 
-    
+
     public function index(){
         // $posts = Post::all();
         $posts = Post::latest()->get();
@@ -67,6 +67,44 @@ class BlogController extends Controller
        $post->save();
 
        return redirect()->back()->with('status', 'Post Created Successfully');
+    }
+
+
+
+    public function edit(Post $post){
+        if(auth()->user()->id !== $post->user->id){
+            abort(403);
+        }
+        return view('blogPosts.edit-blog-post', compact('post'));
+    }
+
+    public function update(Request $request, Post $post){
+        if(auth()->user()->id !== $post->user->id){
+            abort(403);
+        }
+        $request->validate([
+            'title' => 'required',
+            'image' => 'required | image',
+            'body' => 'required'
+        ]);
+
+        $title = $request->input('title');
+        $postId = $post->id;
+        $slug = Str::slug($title, '-') . '-' . $postId;
+        $body = $request->input('body');
+
+        //File upload
+        $imagePath = 'storage/' . $request->file('image')->store('postsImages', 'public');
+
+
+        $post->title = $title;
+        $post->slug = $slug;
+        $post->body = $body;
+        $post->imagePath = $imagePath;
+
+        $post->save();
+
+        return redirect()->back()->with('status', 'Post Edited Successfully');
     }
 
 
