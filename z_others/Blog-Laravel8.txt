@@ -151,6 +151,32 @@
 						>>>$post->user->name
 						 => "Admin"
 
+			//------------------------------------------------ Authentication with Laravel Breeze ----------------------------------------------------------------
+						//--Laravel-breeze Documentation in Laravel_Doc: https://laravel.com/docs/8.x/starter-kits#laravel-breeze
+						
+						//--1-- command: composer require laravel/breeze --dev
+						//--2-- command: php artisan breeze:install
+						//--3-- command: npm install
+						//--4-- command: npm run device-width
+						//---- command: php artisan migrate
+						
+						//--erpor amra jodi amader project e giye root_route/login (http://127.0.0.1:8000/login) & root_route/register (http://127.0.0.1:8000/register) diee taile amra Login & Register page dekte pabo. But ekn amra jodi amader Home page(http://127.0.0.1:8000/) e jaite chai taile amra jaite parbo na, error dibe, because ekhane Laravel-breeze install hole amader project er 'web.php' file ta abar new kore generate hoy, jar karone amader agher code gual sob web.php theke chole jabe, now amader k abar code gula likhe/ante hobe(ekhane amra github theke abar web.php er code gual copy kore niye eshchi). taile abar amra home ta pabo jeheto route add kora hoyeche ekn. Laravel-Breeze install korar por amader project er "Controller" folder er moddhe "Auth" name ekta folder chole asbe jar moddhe breeze er sob controller thakbe, ar "resources/views" er moddheo "auth" name ekta folder chole asbe jar moddhe breeze er sob view blade file gula thakbe. e charao "resources/views" er moddhe 'layouts' name e folder, 'components' name e folder & views er root e "dashboard.blade.php" name e ekta file O chole asbe. But ekhane Laravel-Breeze er sob view file mane design gula Tilwind-CSS e kora. amra jodi bootstrap use korte chai taile amader k esob remove kore scratch theke bootstap likte hobe ei file.
+						
+											//----------------------------- web.php file e new vabe nicher code gula add hoyeche ---------------------------
+														Route::get('/dashboard', function () {
+															return view('dashboard');
+														})->middleware(['auth'])->name('dashboard');
+
+														require __DIR__.'/auth.php';
+						//-----------------------------------------------------------------------					
+						//------------ apply middleware ------------------					
+								-- Route::get('/blog/create', [BlogController::class, 'create'])->name('blog.create')->middleware('auth');
+								------ or in controller----------
+								public function __construct()
+								{
+								   $this->middleware('auth')->except(['index']);
+								}
+
 			//--
 
 
@@ -1001,7 +1027,8 @@
 					
 					public function __construct()
 					{
-					   $this->middleware('auth')->except(['index']);
+					        // $this->middleware('auth')->except(['index']);
+							$this->middleware('auth')->except(['index', 'show']);
 					}
 	
 					public function index(){
@@ -1091,15 +1118,189 @@
 				}		
 				
 
-//============================= Route Model Binding ============================================================
-//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
-//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
-//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
-//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
-//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
+//============================= Edit/Delete Post ============================================================
+			
+//------------------------------------------------resources/views/blogPosts/blog.blade.php -----------------------------------------------------------------------
+					<h2 class="header-title">All Blog Posts</h2>
+
+					@if (session('status'))
+						<p style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
+							{{ session('status') }}
+						</p>
+					@endif
+								
+					@foreach ($posts as $post)
+						<div class="card-blog-content">
+							@auth
+								@if (auth()->user()->id === $post->user->id)
+									<div class="post-buttons">
+										<a href="{{route('blog.edit', $post)}}">Edit</a>
+										<form action="{{ route('blog.delete', $post) }}" method="post">
+											@csrf
+											@method('delete')
+											<input type="submit" value=" Delete">
+										</form>
+									</div>
+								@endif
+							@endauth
+							<img src="{{ asset($post->imagePath) }}" alt="" />
+							<p>
+								{{ $post->created_at->diffForHumans() }}
+								<span>Written By {{ $post->user->name }}</span>
+							</p>
+							<h4>
+								<a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
+							</h4>
+						</div>
+					@endforeach		
+					
+//------------------------------------------------ routes/web.php -----------------------------------------------------------------------					
+			// To edit single blog post
+			Route::get('/blog/{post}/edit', [BlogController::class, 'edit'])->name('blog.edit');
+
+			// To update single blog post
+			Route::put('/blog/{post}/update', [BlogController::class, 'update'])->name('blog.update');
+			
+			// To update single blog post
+			Route::delete('/blog/{post}', [BlogController::class, 'delete'])->name('blog.delete');
+			
+//------------------------------------------------ app/Http/Controllers/BlogController.php -----------------------------------------------------------------------			
+				public function edit(Post $post){
+						if(auth()->user()->id !== $post->user->id){
+							abort(403);
+						}
+						return view('blogPosts.edit-blog-post', compact('post'));
+					}
+
+					public function update(Request $request, Post $post){
+						if(auth()->user()->id !== $post->user->id){
+							abort(403);
+						}
+						$request->validate([
+							'title' => 'required',
+							'image' => 'required | image',
+							'body' => 'required'
+						]);
+
+						$title = $request->input('title');
+						$postId = $post->id;
+						$slug = Str::slug($title, '-') . '-' . $postId;
+						$body = $request->input('body');
+
+						//File upload
+						$imagePath = 'storage/' . $request->file('image')->store('postsImages', 'public');
+
+
+						$post->title = $title;
+						$post->slug = $slug;
+						$post->body = $body;
+						$post->imagePath = $imagePath;
+
+						$post->save();
+
+						return redirect()->back()->with('status', 'Post Edited Successfully');
+					}
+					
+					
+					public function delete(Post $post){
+						$post->delete();
+						return redirect()->back()->with('status', 'Post Delete Successfully');
+					}
+		
+//------------------------------------------------ resources/views/blogPosts/edit-blog-post.blade.php ---------------------------------------------------		
+				@extends('layout')
+				@section('head')
+					<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+				@endsection
+				@section('main')
+					<main class="container" style="background-color: #fff;">
+						<section id="contact-us">
+							<h1 style="padding-top: 50px;">Edit Post!</h1>
+							@if (session('status'))
+								<p
+									style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
+									{{ session('status') }}</p>
+							@endif
+
+							<!-- Contact Form -->
+							<div class="contact-form">
+								<form action="{{ route('blog.update', $post) }}" method="post" enctype="multipart/form-data">
+									@method('put')
+									@csrf
+									<!-- Title -->
+									<label for="title"><span>Title</span></label>
+									<input type="text" id="title" name="title" value="{{ $post->title }}" />
+									@error('title')
+										{{-- The $attributeValue field is/must be $validationRule --}}
+										<p style="color: red; margin-bottom:25px;">{{ $message }}</p>
+									@enderror
+									<!-- Image -->
+									<label for="image"><span>Image</span></label>
+									<input type="file" id="image" name="image" />
+									@error('image')
+										{{-- The $attributeValue field is/must be $validationRule --}}
+										<p style="color: red; margin-bottom:25px;">{{ $message }}</p>
+									@enderror
+									<!-- Body-->
+									<label for="body"><span>Body</span></label>
+									<textarea id="body" name="body">{{ $post->body }}</textarea>
+									@error('body')
+										{{-- The $attributeValue field is/must be $validationRule --}}
+										<p style="color: red; margin-bottom:25px;">{{ $message }}</p>
+									@enderror
+									<!-- Button -->
+									<input type="submit" value="Submit" />
+								</form>
+							</div>
+
+						</section>
+					</main>
+				@endsection
+
+				@section('scripts')
+					<script>
+						CKEDITOR.replace('body');
+					</script>
+				@endsection
+			
+
+
+//=================================== Search || Searching Blog Posts ==============================================
+//------------------------------------------------blog.blade.php -----------------------------------------------------------------------	
+					{{-- Search here --}}
+					<div class="searchbar">
+						<form action="">
+							<input type="text" placeholder="Search..." name="search" />
+							<button type="submit">
+								<i class="fa fa-search"></i>
+							</button>
+						</form>
+					</div>			
+//------------------------------------------------app/Http/Controllers/BlogController.php -----------------------------------------------------------------------					
+				    //fetching all data from db
+					// public function index(){
+					//     // $posts = Post::all();
+					//     $posts = Post::latest()->get();
+					//     return view('blogPosts.blog', compact('posts'));
+					// }
+
+					//fetching all data form db + fetching also search result
+					public function index(Request $request){
+						if($request->search){
+							$posts = Post::where('title', 'like', '%' . $request->search . '%')
+							->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
+						} else{
+							$posts = Post::latest()->get();
+						}
+
+						return view('blogPosts.blog', compact('posts'));
+					}
 				
 				
-				
+//=================================== Search || Searching Blog Posts ==============================================
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
+//------------------------------------------------ resources/views/welcome.blade.php -----------------------------------------------------------------------					
 				
 				
 				

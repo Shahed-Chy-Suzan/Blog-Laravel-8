@@ -11,6 +11,7 @@
             </p>
         @endif
 
+        {{-- Search here --}}
         <div class="searchbar">
             <form action="">
                 <input type="text" placeholder="Search..." name="search" />
@@ -19,6 +20,7 @@
                 </button>
             </form>
         </div>
+
         <div class="categories">
             <ul>
                 <li><a href="">Health</a></li>

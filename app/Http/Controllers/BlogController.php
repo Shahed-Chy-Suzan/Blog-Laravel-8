@@ -11,13 +11,27 @@ class BlogController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('auth')->except(['index']);
+        // $this->middleware('auth')->except(['index']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
 
-    public function index(){
-        // $posts = Post::all();
-        $posts = Post::latest()->get();
+    //fetching all data from db
+    // public function index(){
+    //     // $posts = Post::all();
+    //     $posts = Post::latest()->get();
+    //     return view('blogPosts.blog', compact('posts'));
+    // }
+
+    //fetching all data form db + fetching also search result
+    public function index(Request $request){
+        if($request->search){
+            $posts = Post::where('title', 'like', '%' . $request->search . '%')
+            ->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
+        } else{
+            $posts = Post::latest()->get();
+        }
+
         return view('blogPosts.blog', compact('posts'));
     }
 
