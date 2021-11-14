@@ -1397,25 +1397,27 @@
 
 
 //================================ Customizing Pagination View with Tailwind CSS ===========================================	
+		//--YouTube_link: https://www.youtube.com/watch?v=tM6T0-RfPvk&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=35
 		//--normally amader pagination er default view/design ta ache hocche amader laravel-project er  [\vendor\laravel\framework\src\Illuminate\Pagination\resources\views] ei directory te, So amader k ei view ta amader project er "views" folder er directory te copy kore/niye jaite hobe... So er jonno amader command holo: php artisan vendor:publish --tag=laravel-pagination
 				--command: php artisan vendor:publish --tag=laravel-pagination
-		//--eknn okhande onek(7ta) file royeche, tar moddhe by default laravel pagination design tar jonno "tailwind.blade.php" (resources/views/vendor/pagination/tailwind.blade.php) ei file ta use hoy(default vabe). //--Ekn amra jodi chai j ei tailwind pagination er default color/design gula change korbo taile amra ei file(resources/views/vendor/pagination/tailwind.blade.php) e eshe amader motho change korte pari.
+		//--eknn okhanne onek(7ta) file royeche, tar moddhe by default laravel pagination design tar jonno "tailwind.blade.php" (resources/views/vendor/pagination/tailwind.blade.php) ei file ta use hoy(default vabe). //--Ekn amra jodi chai j ei tailwind pagination er default color/design gula change korbo taile amra ei file(resources/views/vendor/pagination/tailwind.blade.php) e eshe amader motho change korte pari.
 		
 		//------------------------------------------------ resources/views/layout.blade.php -----------------------------------------------------------------------					
 							{{-- Tailwind CDN --}}
 							<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css">
 							
-		//--------- resources/views/vendor/pagination/bootstrap-4.blade.php ------------
-		//--------- resources/views/vendor/pagination/default.blade.php --------------
-		//--------- resources/views/vendor/pagination/semantic-ui.blade.php ------------
-		//--------- resources/views/vendor/pagination/simple-bootstrap-4.blade.php ------------
-		//--------- resources/views/vendor/pagination/simple-default.blade.php ------------
-		//--------- resources/views/vendor/pagination/simple-tailwind.blade.php -------------
-		//--------- resources/views/vendor/pagination/tailwind.blade.php -----------
+		//---- resources/views/vendor/pagination/bootstrap-4.blade.php ------
+		//---- resources/views/vendor/pagination/default.blade.php -------
+		//---- resources/views/vendor/pagination/semantic-ui.blade.php ------
+		//---- resources/views/vendor/pagination/simple-bootstrap-4.blade.php ------
+		//---- resources/views/vendor/pagination/simple-default.blade.php ------
+		//---- resources/views/vendor/pagination/simple-tailwind.blade.php ------
+		//---- resources/views/vendor/pagination/tailwind.blade.php -----
 		
 		
 		
 //================================ Customizing Pagination View with Bootstrap =============================================			
+		//--YouTube_link: https://www.youtube.com/watch?v=FDFTPFrMls0&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=36
 		//-------------------------------------- app/Providers/AppServiceProvider.php -------------------------------------------------------
 						use Illuminate\Pagination\Paginator;		//-----------------
 						
@@ -1437,11 +1439,29 @@
 
 
 
-//================================ Customizing Pagination View with Vanilla Css ============================================			
-		//-------------------------------------- app/Providers/AppServiceProvider.php --------------------------------------------------------------------------
+//================================ Customizing Pagination View with Vanilla Css ============================================	
+		//--YouTube_link: https://www.youtube.com/watch?v=VJldA5Nt_8c&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=37
+		//--first of all "app/Providers/AppServiceProvider.php" e giye bootstap er jonno ja add korechilam segula remove korechi,  then "resources/views/blogPosts/blog.blade.php" te giye agher pagination er jonno bootstap/tailwind er pagination er jonno code ta ( {{$posts->links()}} ) comment/remove kore diyechi,.... and new kore ( {{$posts->links('pagination::default')}} ) ei code add korechi,... 
+		
 		//-------------------------------------- resources/views/blogPosts/blog.blade.phps ---------------------------------------------------------------
+						{{$posts->links('pagination::default')}}
 		//-------------------------------------- resources/views/layout.blade.php --------------------------------------------------------------------------------
+						<link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 		//-------------------------------------- resources/views/vendor/pagination/default.blade.php -------------------------------------------------------
-		//-------------------------------------- resources/views/vendor/pagination/vanilla-css-pagination.blade.php --------------------------------------
+					//--ekn amra jodi chai j ei ei custom css diye pagination er add korbo taile amra ei file(resources/views/vendor/pagination/default.blade.php) e eshe amader motho code add/change korte pari... amader custom css diye banano j pagination ta choice hobe ota amra amader css file css code add kore project e link korai dibo, then html code gula amader ei "default.blade.php" file e ene code onosare jaiga motho code replace/bosiye dibo.
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				
 				

@@ -75,7 +75,11 @@
             <a href="">&raquo;</a>
         </div> --}}
 
-        {{$posts->links()}}
+
+        {{-- {{$posts->links()}} --}}       <!--- for pagination with Tilwind/Bootstrap --->
+
+
+        {{$posts->links('pagination::default')}}  <!--- for Customizing Pagination View with Vanilla Css --->
 
         <br>
     @endsection
