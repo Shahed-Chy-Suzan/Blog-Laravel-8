@@ -12,7 +12,7 @@
         @endif --}}
 
         @include('includes.flash-message')
-        
+
         {{-- Search here --}}
         <div class="searchbar">
             <form action="">
