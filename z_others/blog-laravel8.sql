@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2021 at 06:19 AM
+-- Generation Time: Nov 15, 2021 at 06:35 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -40,7 +40,10 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (1, 'Keyboard', '2021-11-14 09:20:00', '2021-11-14 09:20:00'),
-(2, 'Entertainment', '2021-11-14 09:27:37', '2021-11-14 23:11:09');
+(2, 'Entertainment', '2021-11-14 09:27:37', '2021-11-14 23:11:09'),
+(4, 'Car', '2021-11-14 23:28:56', '2021-11-14 23:28:56'),
+(5, 'Sports', '2021-11-14 23:29:02', '2021-11-14 23:29:02'),
+(6, 'Gadgets', '2021-11-14 23:33:17', '2021-11-14 23:33:17');
 
 -- --------------------------------------------------------
 
@@ -233,7 +236,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`

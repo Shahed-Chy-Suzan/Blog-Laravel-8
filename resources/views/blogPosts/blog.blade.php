@@ -23,10 +23,9 @@
 
         <div class="categories">
             <ul>
-                <li><a href="">Health</a></li>
-                <li><a href="">Entertainment</a></li>
-                <li><a href="">Sports</a></li>
-                <li><a href="">Nature</a></li>
+                @foreach ($categories as $category)
+                    <li><a href="">{{ $category->name }}</a></li>
+                @endforeach
             </ul>
         </div>
 
@@ -56,8 +55,7 @@
                         <a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>
                     </h4>
                 </div>
-
-                @empty
+            @empty
                 <p>Sorry, currently there is no blog post related to that search!</p>
             @endforelse
             {{-- @endforeach --}}
@@ -79,7 +77,7 @@
         {{-- {{$posts->links()}} --}}       <!--- for pagination with Tilwind/Bootstrap --->
 
 
-        {{$posts->links('pagination::default')}}  <!--- for Customizing Pagination View with Vanilla Css --->
+        {{ $posts->links('pagination::default') }}  <!--- for Customizing Pagination View with Vanilla Css --->
 
         <br>
     @endsection

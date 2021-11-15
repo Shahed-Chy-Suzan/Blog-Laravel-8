@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Post;
+use App\Models\Category;
 
 class BlogController extends Controller
 {
@@ -34,7 +35,9 @@ class BlogController extends Controller
             // $posts = Post::latest()->get();
         }
 
-        return view('blogPosts.blog', compact('posts'));
+        $categories = Category::all();
+
+        return view('blogPosts.blog', compact('posts', 'categories'));
     }
 
 
