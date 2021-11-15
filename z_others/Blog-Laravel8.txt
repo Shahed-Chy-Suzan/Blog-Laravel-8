@@ -1544,55 +1544,119 @@
 				
 //========================================= Category // resource route =======================================
 
-			--amra ekhan 1ta command diyei "category" er jonno Model, Controller(resource controller), migration/DB table make korbo.
-					--command: php artisan make:model Category -mrc
-			
-//---------------------------------------------------------- routes/web.php  -----------------------------------------------------------------
-				// Category resource controller
-				Route::resource('/categories', CategoryController::class);
-
-				//----------The resource controller above under the hood.-------------
-					// Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-					// Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-					// Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-					// Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
-					// Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-					// Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
-					// Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-
-
-//------------------------------------------------ database/migrations/categories_table.php  ------------------------------------------------------		
-					Schema::create('categories', function (Blueprint $table) {
-							$table->id();
-							$table->string('name')->unique();
-							$table->timestamps();
-					});
-					
-				--command: $ php artisan migrate
-					
-//---------------------------------------------------------- app/Models/Category.php  ------------------------------------------------------------
-
-//---------------------------------------------- app/Http/Controllers/CategoryController.php  -----------------------------------------------------
-				public function create()
-				{
-					return view('categories.create-category');
-				}
+				--amra ekhan 1ta command diyei "category" er jonno Model, Controller(resource controller), migration/DB table make korbo.
+						--command: php artisan make:model Category -mrc
 				
-//---------------------------------------------- resources/views/categories/create-category.blade.php  ----------------------------------------------
-				@extends('layout')
+	//---------------------------------------------------------- routes/web.php  -----------------------------------------------------------------
+					// Category resource controller
+					Route::resource('/categories', CategoryController::class);
 
-				@section('head')
-					<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-				@endsection
+					//----------The resource controller above under the hood.-------------
+						// Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+						// Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+						// Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+						// Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+						// Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+						// Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+						// Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+
+	//------------------------------------------------ database/migrations/categories_table.php  ------------------------------------------------------		
+						Schema::create('categories', function (Blueprint $table) {
+								$table->id();
+								$table->string('name')->unique();
+								$table->timestamps();
+						});
+						
+					--command: $ php artisan migrate
+						
+						
+	//--------------------------------------------- resources/views/dashboard.blade.php  -------------------------------------------------------
+							<li><a href="{{route('categories.create')}}">Create Category</a></li>
+                            <li><a href="{{route('categories.index')}}">Categories List</a></li>
+							
+							
+	//---------------------------------------------------------- app/Models/Category.php  ------------------------------------------------------------
+
+
+	//---------------------------------------------- app/Http/Controllers/CategoryController.php  -----------------------------------------------------
+					use App\Models\Category;
+					
+					public function __construct()
+					{
+						// $this->middleware('auth')->except(['index']);
+						$this->middleware('auth');
+					}
+					
+					public function index()
+					{
+						$categories = Category::all();
+						return view('categories.index-categories', compact('categories'));
+					}		
+					
+					public function create()
+					{
+						return view('categories.create-category');
+					}
+					
+					public function store(Request $request)
+					{
+						$request->validate([
+							'name' => 'required | unique:categories',
+						]);
+
+						$name = $request->input('name');
+						$category = new Category();
+						$category->name = $name;
+
+						$category->save();
+
+						return redirect()->back()->with('status', 'Category Created Successfully');
+					}
+					
+					public function show(Category $category)
+					{
+						//
+					}
+
+					public function edit(Category $category)
+					{
+						return view('categories.edit-category', compact('category'));
+					}
+					
+					public function update(Request $request, Category $category)
+					{
+						$request->validate([
+							'name' => 'required | unique:categories',
+						]);
+
+						$name = $request->input('name');
+
+						$category->name = $name;
+
+						$category->save();
+
+						return redirect(route('categories.index'))->with('status', 'Category Edited Successfully');
+					}
+
+
+					public function destroy(Category $category)
+					{
+							$category->delete();
+							return redirect()->back()->with('status', 'Category Deleted Successfully');
+					}
+					
+	//---------------------------------------------- resources/views/categories/create-category.blade.php  ----------------------------------------------		
+				@extends('layout')
 
 				@section('main')
 					<main class="container" style="background-color: #fff;">
 						<section id="contact-us">
 							<h1 style="padding-top: 50px;">Create New Category!</h1>
 							@if (session('status'))
-								<p
-									style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
-									{{ session('status') }}</p>
+								<p style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
+									{{ session('status') }}
+								</p>
 							@endif
 
 							<!-- Contact Form -->
@@ -1611,19 +1675,152 @@
 									<input type="submit" value="Submit" />
 								</form>
 							</div>
+							<div class="create-categories">
+								<a href="{{route('categories.index')}}">Categories list <span>&#8594;</span></a>
+							</div>
 						</section>
 					</main>
 				@endsection
 
+	//---------------------------------------------- resources/views/categories/index-categories.blade.php  ----------------------------------------------
+						@extends('layout')
 
-				@section('scripts')
-					<script>
-						CKEDITOR.replace('body');
-					</script>
+						@section('main')
+							<div class="categories-list">
+								<h1>Categories List</h1>
+								@if (session('status'))
+									<p
+										style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
+										{{ session('status') }}</p>
+								@endif
+								@foreach ($categories as $category)
+									<div class="item">
+										<p>{{ $category->name }}</p>
+										<div>
+											<a href="{{ route('categories.edit', $category) }}">Edit</a>
+										</div>
+										<form action="{{route('categories.destroy', $category)}}" method="post">
+											@method('delete')
+											@csrf
+											<input type="submit" value="Delete">
+										</form>
+									</div>
+								@endforeach
+								<div class="index-categories">
+									<a href="{{ route('categories.create') }}">Create category<span>&#8594;</span></a>
+								</div>
+							</div>
+						@endsection
+
+	//---------------------------------------------- resources/views/categories/edit-category.blade.php   ----------------------------------------------
+				@extends('layout')
+
+				@section('main')
+					<main class="container" style="background-color: #fff;">
+						<section id="contact-us">
+							<h1 style="padding-top: 50px;">Edit Category!</h1>
+							@if (session('status'))
+								<p
+									style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
+									{{ session('status') }}</p>
+							@endif
+
+							<!-- Contact Form -->
+							<div class="contact-form">
+								<form action="{{ route('categories.update', $category) }}" method="post" >
+									@method('put')
+									@csrf
+									<!-- name -->
+									<label for="name"><span>Name</span></label>
+									<input type="text" id="name" name="name" value="{{ $category->name }}" />
+									@error('name')
+										{{-- The $attributeValue field is/must be $validationRule --}}
+										<p style="color: red; margin-bottom:25px;">{{ $message }}</p>
+									@enderror
+
+									<!-- Button -->
+									<input type="submit" value="Submit" />
+								</form>
+							</div>
+							<div class="create-categories">
+								<a href="{{route('categories.index')}}">Categories list <span>&#8594;</span></a>
+							</div>
+						</section>
+					</main>
 				@endsection
-
+	
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//----------					
 				
+				
+				
+				
+//============================= Frontend Display of Categories Dynamically in Blog page =========================
+				
+		//------------------------------------ app/Http/Controllers/BlogController.php  ---------------------------------------	
+							use App\Models\Category;		
+							
+						    public function index(Request $request){
+								if($request->search){
+									$posts = Post::where('title', 'like', '%' . $request->search . '%')
+											// ->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
+											->orWhere('body', 'like', '%' . $request->search . '%')->latest()->paginate(4);
+								} else{
+									$posts = Post::latest()->paginate(4);
+									// $posts = Post::latest()->get();
+								}
 
+								$categories = Category::all();				/---------------------------------
+
+								return view('blogPosts.blog', compact('posts', 'categories'));
+							}
+							
+		//------------------------------------ resources/views/blogPosts/blog.blade.php  ---------------------------------------		
+						<ul>
+							@foreach ($categories as $category)
+								<li><a href="">{{ $category->name }}</a></li>
+							@endforeach
+						</ul>
+	
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//----------					
+				
+				
+				
+				
+//============================================= Include flash-message ==========================================
+				
+		//------------------------------------ resources/views/includes/flash-message.blade.php   ---------------------------------------	
+						@if (session('status'))
+						<p
+							style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
+							{{ session('status') }}</p>
+						@endif 
+		//------------------------------------ resources/views/blogPosts/blog.blade.php   ---------------------------------------	
+						@include('includes.flash-message')
+		//------------------------------------ resources/views/blogPosts/create-blog-post.blade.php   ---------------------------------------	
+						@include('includes.flash-message')
+		//------------------------------------ resources/views/blogPosts/edit-blog-post.blade.php   ---------------------------------------	
+						@include('includes.flash-message')
+		//------------------------------------ resources/views/categories/create-category.blade.php   ---------------------------------------	
+						@include('includes.flash-message')
+		//------------------------------------ resources/views/categories/edit-category.blade.php   ---------------------------------------	
+						@include('includes.flash-message')
+		//------------------------------------ resources/views/categories/index-categories.blade.php   ---------------------------------------	
+						@include('includes.flash-message')
+				
+				
+	
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//----------					
+				
+				
+				
+				
+//=================================== Attaching Category Id to Post ======================================
+				
+		//------------------------------------ resources/views/includes/flash-message.blade.php   ---------------------------------------	
+				
+				
+				
+				
 				
 				
 				

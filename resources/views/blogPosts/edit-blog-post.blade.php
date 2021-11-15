@@ -6,11 +6,13 @@
     <main class="container" style="background-color: #fff;">
         <section id="contact-us">
             <h1 style="padding-top: 50px;">Edit Post!</h1>
-            @if (session('status'))
+            {{-- @if (session('status'))
                 <p
                     style="color: #fff; width:100%;font-size:18px;font-weight:600;text-align:center;background:#5cb85c;padding:17px 0;margin-bottom:6px;">
                     {{ session('status') }}</p>
-            @endif
+            @endif --}}
+
+            @include('includes.flash-message')
 
             <!-- Contact Form -->
             <div class="contact-form">
