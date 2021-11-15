@@ -81,8 +81,63 @@
 					$title = $request->input('title');	//title ta input form er request theke dhorlam/nilam
 				   $slug = Str::slug($title, '-');				//ekhane amra slug ta title theke generate krtechi + eta title ta k first e lower_case e convert korbe then er protita word k '-'(hipen) dhara separate kore show korbe.
 			
-			//-- 
-				   
+			//-- {{$post->created_at->diffForHumans()}}			//Ex: 3 days ago
+			
+			//-- <form id="delete-form" method="post" action="/dashboard/links/{{ $link->id }}">
+						@csrf
+						@method('DELETE')
+					</form>
+					--- --- --- ---
+					<button type="button" class="btn btn-secondary"
+								onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Delete Link
+					</button>
+
+			//-- <input type="text" id="name" name="name" value="{{ old('name') }}" />	//old() etar maddhome input field agher value ta dhore rakbe.
+
+			//-- <a href="" style="pointer-events: none; opacity:0.5;">Contact</a>	
+						//ekhane style e "pointer-events: none" mane holo amra ar ei contact link/button ta click korte parbo na, mane oita ar clickable thakbe na.
+
+			//-- Route Model Binding ---------------
+				<a href="{{route('blog.show', $post)}}">{{$post->title}}</a>
+						- Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');		//this will take slug from {post:slug}
+						- Route::get('/blog/{post}', [BlogController::class, 'show'])->name('blog.show');		//this will take id from {post}
+							- 	public function show(Post $post){
+									return view('blogPosts.single-blog-post', compact('post'));
+								}
+
+			//-- $posts = Post::latest()->get();		//will fetch all data form posts table with Descending order
+
+				//$slug = Str::slug($title, '-');
+			   $postId = Post::latest()->take(1)->first()->id + 1;		//will fetch last row ID form posts table with Descending order
+			   $slug = Str::slug($title, '-') . '-' . $postId;
+
+			//-- Route::get('/blog/create', [BlogController::class, 'create'])->name('blog.create')->middleware('auth');
+				------ or ----------
+				public function __construct()
+				{
+					// $this->middleware('auth')->except(['index']);
+					// $this->middleware('auth');
+					$this->middleware('auth')->except(['index', 'show']);
+				}
+
+			//-- ekn jodi amra chai je amader ekhane search result na asle amader kicho ekta bolbe, suppose bolbe j "No result found", taile amader k code ta likte hobe:
+									{{-- @foreach ($posts as $post) --}}
+									@forelse($posts as $post)
+											//code loop will go here...//
+										@empty
+										<p>Sorry, currently there is no blog post related to that search!</p>
+									@endforelse
+									{{-- @endforeach --}}
+
+			//-- filter category : 
+					-route:-->> <a href="{{route('blog.index', ['category' => $category->name ])}}">{{ $category->name }}</a>
+					- controller:-->>
+							elseif($request->category){
+									$posts = Category::where('name', $request->category)->firstOrFail()->posts()->paginate(3)->withQueryString();
+							}
+					//--ekhane route e ['category' => $category->name ] ei array ta diye category er name ta url e patano hocche ei "withQueryString()" ei method ta use kora hoyeche jathe pagination e next page e gelo jeno amader url e category name ta theke jai,
+
+							   
 			//--------------------------- file upload using store() method in storage -----------------------------------
 					//--YouTube_link: https://www.youtube.com/watch?v=rvhZRbM966I&list=PL-OHVhAxtpSD41d98Nrpw32rrhJ5vvVtL&index=20
 					//--amra eikhane ( $request->file('image')->store('public'); ) ei line ta likha mane holo: user er form-request theke first e image ta k dhorechi then ota k store korechi store('public') method er maddhome ja store hobe hocceh "storage/app/public" folder e, ekn amra jodi chai j amader ei upload kora file/image gula evabe "storage/app/public" folder e randomly rakbo na, new folder create kore ermoddhe rakbo taile amra code likbo: ( $request->file('image')->store('postsImages', 'public'); ). ekhane store() method e first perameter ta diye folder er name bojano hoyeche jeta create kora hobe. //--Ekn evabe amader upload kora protita file "storage/app/public/postsImages" e joma/store hobe, but amra jokon file/image access korte jai amra jani Laravel ta asset() mane project root e "public" folder k target/focus kore, tai amader k ekn ei upload kora image/file gula k  access korar jonno ei  "storage/app/public/postsImages" tar ekta link copy banate hobe project root e "public" folder e. ar eta amra ekta command er maddhome easily korte pari, ta holo: ( command:  php artisan storage:link ). ekn taile amader agher storage folder er directory tar ekta copy link hoye jabe amader project root e "public" folder e ar ta hobe ("public/storage/postsImages"). Ekn amader jodi kono Image/file access/show korte chai taile amader k path(pic ta j public folder er 'storage/postsImages' er vitore ache) ta bole access korte hobe, So final code ta hobe: ( $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public');  ) .//-- ar evabe upload/input neya protita image/file e unique name e save hoye jabe automatic, so name conflict er kono problem thakbe na.
@@ -941,6 +996,7 @@
 					'custom' => [
 						'attribute-name' => [
 							'rule-name' => 'custom-message',
+							'category_id' => 'required'
 						],
 
 						'image' => [																	//---------------------------------
@@ -1990,7 +2046,8 @@
 				
 				
 //================================================ Sending Email ============================================
-				
+		//--mail sending problem solution link: https://medium.com/graymatrix/using-gmail-smtp-server-to-send-email-in-laravel-91c0800f9662
+		
 		//-----------------------------------------  resources/views/contact.blade.php  -----------------------------------------------
 						@extends('layout')
 
@@ -2099,7 +2156,8 @@
 									'message' => 'required'
 								]);
 
-								Mail::to('alphayowakarindi@gmail.com')->send(new Contact($data));
+								Mail::to('sujanctg15@gmail.com')->send(new Contact($data));
+								// Mail::to($request->email)->send(new Contact($data));
 
 								return redirect(route('contact.index'))->with('status', "Thank you, we'll be in touch soon");
 							}
@@ -2166,7 +2224,7 @@
 					// To Send data to email.
 					Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 		
-//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//---------------					
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//---------------				
 //-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//---------------					
 
 		
@@ -2174,6 +2232,10 @@
 		
 		
 		
+		
+//============================================================================================================
+																//----------------- The End -------------------//
+//============================================================================================================
 		
 		
 		

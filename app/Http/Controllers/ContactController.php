@@ -22,7 +22,8 @@ class ContactController extends Controller
             'message' => 'required'
         ]);
 
-        Mail::to('alphayowakarindi@gmail.com')->send(new Contact($data));
+        Mail::to('sujanctg15@gmail.com')->send(new Contact($data));
+        // Mail::to($request->email)->send(new Contact($data));
 
         return redirect(route('contact.index'))->with('status', "Thank you, we'll be in touch soon");
     }
