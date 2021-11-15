@@ -60,6 +60,8 @@ Route::get('/about', function(){
 // To contact page
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
+// To Send data to email.
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Category resource controller
 Route::resource('/categories', CategoryController::class);
