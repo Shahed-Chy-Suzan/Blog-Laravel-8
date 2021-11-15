@@ -18,6 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->string('slug');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');//kono user delete korle tar sob post delete hoye jabe etai holo onDelete('cascade') er kaj.
+            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->string('imagePath');
             $table->text('body');
             $table->timestamps();

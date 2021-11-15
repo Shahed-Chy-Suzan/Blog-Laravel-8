@@ -43,6 +43,7 @@
 							$request->validate([
 								'title' => 'required',
 								'image' => 'required | image',
+								'category_id' => 'required'
 							]);
 					--------------------------
 					-- in blade file: ----
@@ -59,6 +60,9 @@
 
 								'image' => [																	//---------------------------------
 									'image' => 'The file must be an image.'
+								],
+								'category_id' => [
+									'required' => 'The Category field is required..'
 								],
 								// 'title' => [
 								//     'required' => 'The file must be an aaaaaaa.'
@@ -1814,10 +1818,80 @@
 				
 				
 				
-//=================================== Attaching Category Id to Post ======================================
+//======================================= Attaching Category Id to Post =========================================
 				
-		//------------------------------------ resources/views/includes/flash-message.blade.php   ---------------------------------------	
+		//----------------------------------------- app/Http/Controllers/BlogController.php  --------------------------------------------	
+						public function create(){
+								$categories = Category::all();
+								return view('blogPosts.create-blog-post', compact('categories'));
+						}
+						
+						public function store(Request $request){
+								$request->validate([
+									'title' => 'required',
+									'image' => 'required | image',
+									'body' => 'required',
+									'category_id' => 'required'							//--------------------------------
+								]);
+
+							   $title = $request->input('title');
+							   //$slug = Str::slug($title, '-');
+							   $category_id = $request->input('category_id');		//--------------------------------
+
+							   if(Post::latest()->first() !== null){					//--------------------------------
+								$postId = Post::latest()->first()->id + 1;
+							   } else{
+								   $postId = 1;
+							   }
+							   //$postId = Post::latest()->take(1)->first()->id + 1;
+							   $slug = Str::slug($title, '-') . '-' . $postId;
+							   $user_id = Auth::user()->id;
+							   $body = $request->input('body');
+
+							   //File upload
+							   $imagePath = 'storage/'.$request->file('image')->store('postsImages', 'public'); //php artisan storage:link
+
+							   $post = new Post();
+							   $post->title = $title;
+							   $post->category_id = $category_id;			//--------------------------------
+							   $post->slug = $slug;
+							   $post->user_id = $user_id;
+							   $post->body = $body;
+							   $post->imagePath = $imagePath;
+
+							   $post->save();
+
+							   return redirect()->back()->with('status', 'Post Created Successfully');
+						}
+		//-------------------------------------------------------- posts_table.php  ---------------------------------------------------------------------	
+						$table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
+						
+						-- run command: php artisan migrate:fresh
+									-- ei command tar kaj holo ei amader pora database k first e drop korbe then abar sob migrate korbe new kore.
+						-- ekn amader ekhane amra dekte pacchi 'posts' table ta amader 'categories' table er aghe create kora ache ascending order e, but ekhane db table gula jokon drop hoye abar new kore create hothe jabe tkn posts table create howar somoy category table er ID tar jonno categories table ta lagbe but ei Categories table ta posts table er niche howai ei categories table ta pabe na so ekta error dibe, eijonno amra amader ei Categories table tar name rename kore Ascending order e jeno posts table er opore thake oi bebosta kore dibo. taile ar kono error dibe na.(ekhane new kore migrate howar por kinto agher sob data chole jabe, tar mane Database ta ekdom fresh hoye new vabe create hobe).
+						
+		//------------------------------------ resources/views/blogPosts/create-blog-post.blade.php  ---------------------------------------	
+							<!-- Drop down -->
+							<label for="categories"><span>Choose a category:</span></label>
+							<select name="category_id" id="categories">
+								<option selected disabled>Select option </option>
+								@foreach ($categories as $category)
+									<option value="{{ $category->id }}">{{ $category->name }}</option>
+								@endforeach
+							</select>
+							@error('category_id')
+								{{-- The $attributeValue field is/must be $validationRule --}}
+								<p style="color: red; margin-bottom:25px;">{{ $message }}</p>
+							@enderror		
+	
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//----------					
 				
+				
+				
+				
+//================================= Eloquent Relationship between Post & Category ===============================
+				
+		//----------------------------------------- app/Http/Controllers/BlogController.php  --------------------------------------------					
 				
 				
 				

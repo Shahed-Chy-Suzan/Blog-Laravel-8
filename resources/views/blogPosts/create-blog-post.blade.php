@@ -17,7 +17,7 @@
         @endif --}}
 
         @include('includes.flash-message')
-        
+
         <!-- Contact Form -->
         <div class="contact-form" style="padding-left:40px; padding-right:40px; padding-bottom:20px;">
             <form action="{{route('blog.store')}}" method="post" enctype="multipart/form-data">
@@ -39,6 +39,20 @@
                     {{-- The $attributeValue field is/must be $validationRule --}}
                         <p style="color: red; margin-bottom:25px;">{{$message}}</p>
                     @enderror
+
+                    <!-- Drop down -->
+                    <label for="categories"><span>Choose a category:</span></label>
+                    <select name="category_id" id="categories">
+                        <option selected disabled>Select option </option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                        {{-- The $attributeValue field is/must be $validationRule --}}
+                        <p style="color: red; margin-bottom:25px;">{{ $message }}</p>
+                    @enderror
+
 
                     <!-- Body-->
                     <label for="body"><span>Body</span></label>
