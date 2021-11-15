@@ -1963,11 +1963,46 @@
 				
 				
 				
-//================================= Eloquent Relationship between Post & Category ===============================
+//============================= Displaying Related Posts Dynamically in Single Blog Page ==============================
 				
-		//-----------------------------------------  app/Models/Category.php  --------------------------------------------					
+		//-----------------------------------------  app/Http/Controllers/BlogController.php  --------------------------------------------	
+						public function show(Post $post){                       //this $post from route parameter
+							//return view('blogPosts.single-blog-post', compact('post'));
+							$category = $post->category;            //for related post show
+							$relatedPosts = $category->posts()->where('id', '!=', $post->id)->latest()->take(3)->get(); //for related post show
+							return view('blogPosts.single-blog-post', compact('post', 'relatedPosts'));
+						}		
+		//-----------------------------------------  resources/views/blogPosts/single-blog-post.blade.php  --------------------------------------------
+						<div class="recommended-cards">
+							@foreach ($relatedPosts as $relatedPost )
+								<a href="">
+									<div class="recommended-card">
+										<img src="{{ asset($relatedPost->imagePath) }}" alt="" loading="lazy" />
+										<h4>{{ $relatedPost->title }}</h4>
+									</div>
+								</a>
+							@endforeach
+						</div>		
+		
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//---------------					
 				
 				
 				
 				
+//============================= Displaying Related Posts Dynamically in Single Blog Page ==============================
 				
+		//-----------------------------------------  app/Http/Controllers/BlogController.php  --------------------------------------------	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
