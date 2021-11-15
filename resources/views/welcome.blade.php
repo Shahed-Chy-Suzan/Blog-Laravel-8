@@ -2,7 +2,7 @@
 
 @section('header')
     <!-- header -->
-    <header class="header" style=" background-image: url({{asset("images/photography.jpg")}});">
+    <header class="header" style=" background-image: url({{asset("storage/postsImages/V0XtonNxjtM4dMBq7VxGSIhwaBYIEwCYPhdryXIt.jpg")}});">
       <div class="header-text">
         <h1>Blog - Laravel-8</h1>
         <h4>Dashboard of verified news...</h4>
