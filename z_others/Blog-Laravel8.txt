@@ -911,7 +911,8 @@
 					$request->validate([
 						'title' => 'required',
 						'image' => 'required | image',
-						'body' => 'required'
+						'body' => 'required',
+						'category_id' => 'required'
 					]);
 
 				   $title = $request->input('title');
@@ -944,6 +945,9 @@
 
 						'image' => [																	//---------------------------------
 							'image' => 'The file must be an image.'
+						],
+						'category_id' => [
+							'required' => 'The category field is required.'
 						],
 						// 'title' => [
 						//     'required' => 'The file must be an aaaaaaa.'
@@ -1891,9 +1895,77 @@
 				
 //================================= Eloquent Relationship between Post & Category ===============================
 				
-		//----------------------------------------- app/Http/Controllers/BlogController.php  --------------------------------------------					
+		//-----------------------------------------  app/Models/Category.php  --------------------------------------------		
+						class Category extends Model
+						{
+							use HasFactory;
+
+							// We have a category and it hasMany posts
+
+							public function posts(){
+								return $this->hasMany(Post::class);
+							}
+						}		
+		//----------------------------------------- app/Models/Post.php  --------------------------------------------					
+						class Post extends Model
+						{
+							use HasFactory;
+
+							// We have post and it belongsTo a user
+							public function user(){
+								return $this->belongsTo(User::class);
+							}
+
+							// We have a post and it belongsTo a category
+							public function category(){
+								return $this->belongsTo(Category::class);
+							}
+						}
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//----------					
 				
 				
+				
+				
+//=================================== Filter Posts by Category ================================================
+				
+		//-----------------------------------------  app/Http/Controllers/BlogController.php  --------------------------------------------	
+						public function index(Request $request){
+							if($request->search){
+								$posts = Post::where('title', 'like', '%' . $request->search . '%')
+										// ->orWhere('body', 'like', '%' . $request->search . '%')->latest()->get();
+										->orWhere('body', 'like', '%' . $request->search . '%')->latest()->paginate(4);
+							}
+							elseif($request->category){				//------------------------------
+								$posts = Category::where('name', $request->category)->firstOrFail()->posts()->paginate(3)->withQueryString();
+							}
+							else{
+								$posts = Post::latest()->paginate(4);
+								// $posts = Post::latest()->get();
+							}
+
+							$categories = Category::all();
+
+							return view('blogPosts.blog', compact('posts', 'categories'));
+						}		
+		//-----------------------------------------  resources/views/blogPosts/blog.blade.php  --------------------------------------------					
+						<ul>
+							@foreach ($categories as $category)
+								{{-- <li><a href="">{{ $category->name }}</a></li> --}}
+								<li><a href="{{route('blog.index', ['category' => $category->name ])}}">{{ $category->name }}</a></li>
+							@endforeach
+						</ul>			
+		//------------------------------------------------------------
+		
+		//--ekhane route e ['category' => $category->name ] ei array ta diye category er name ta url e patano hocche ei "withQueryString()" ei method ta use kora hoyeche jathe pagination e next page e gelo jeno amader url e category name ta theke jai,
+		
+//-----------------//-------------------//----------------------//--------------------//--------------------//------------------//----------------//---------------					
+				
+				
+				
+				
+//================================= Eloquent Relationship between Post & Category ===============================
+				
+		//-----------------------------------------  app/Models/Category.php  --------------------------------------------					
 				
 				
 				
