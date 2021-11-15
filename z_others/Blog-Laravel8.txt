@@ -1975,7 +1975,7 @@
 		//-----------------------------------------  resources/views/blogPosts/single-blog-post.blade.php  --------------------------------------------
 						<div class="recommended-cards">
 							@foreach ($relatedPosts as $relatedPost )
-								<a href="">
+								<a href="{{ route('blog.show', $relatedPost) }}">
 									<div class="recommended-card">
 										<img src="{{ asset($relatedPost->imagePath) }}" alt="" loading="lazy" />
 										<h4>{{ $relatedPost->title }}</h4>
@@ -1989,9 +1989,14 @@
 				
 				
 				
-//============================= Displaying Related Posts Dynamically in Single Blog Page ==============================
+//================================================ Sending Email ============================================
 				
-		//-----------------------------------------  app/Http/Controllers/BlogController.php  --------------------------------------------	
+		//-----------------------------------------  app/Http/Controllers/ContactController.php  --------------------------------------------	
+		//------------------------------------------------  app/Mail/Contact.php  ---------------------------------------------------------	
+		//-----------------------------------------  resources/views/contact.blade.php  -----------------------------------------------	
+		//-----------------------------------------  resources/views/dashboard.blade.php  --------------------------------------------	
+		//-----------------------------------------  resources/views/mail/mail.blade.php  --------------------------------------------	
+		//-----------------------------------------  routes/web.php  -------------------------------------------------------------------------	
 		
 		
 		
